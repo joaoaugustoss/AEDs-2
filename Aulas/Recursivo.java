@@ -1,4 +1,4 @@
-class Aquecimento{
+class Recursivo{
     public static boolean isMaiuscula (char c){
         return (c >= 'A' && c <= 'Z');
     }
@@ -7,13 +7,15 @@ class Aquecimento{
         return (s.length() == 3 && s.charAt(0) == 'F' && s.charAt(1) == 'I' && s.charAt(2) == 'M');
     }
 
-    public static int contarLetrasMaiusculas (String s){
+    public static int contarLetrasMaiusculas (String s, int count){
         int resp = 0;
-        for(int i = 0; i < s.length(); i++){
-            if(isMaiuscula(s.charAt(i)) == true){
-                resp ++; 
-            }
-        }
+        MyIO.println("Início recursivo");
+        if(s.charAt(count) == '\n')
+            resp = 0;
+        else if(isMaiuscula(s.charAt(count)) == true)
+            resp++;
+        //contarLetrasMaiusculas(s, count++);
+        MyIO.println("Fim recursivo"); 
         return resp;
     }
 
@@ -29,7 +31,7 @@ class Aquecimento{
 
         //Para cada linha de entrada, gerando uma de saida contendo o numero de letras maiusculas da entrada
         for(int i = 0; i < numEntrada; i++){
-            MyIO.println(contarLetrasMaiusculas(entrada[i]));
+            MyIO.println(contarLetrasMaiusculas(entrada[i], 0));
         }
     }
 }
