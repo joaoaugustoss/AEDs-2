@@ -5,18 +5,20 @@ class Alteracao{
         return (s.length() == 3 && s.charAt(0) == 'F' && s.charAt(1) == 'I' && s.charAt(2) == 'M');
     }
 
-    public static int gerador(){
-        int n;
-        Random gerador = new Random();
-        gerador.setSeed(4);
-        n = Math.abs(gerador.nextInt()) % 26;
+    public static char gerador(Random gerador){
+        char n;
+        n = (char)( 'a' + (Math.abs(gerador.nextInt()) % 26));
         return n;
     }
 
-    public static String converterLinha(String s){
+    public static String converterLinha(String s, char a, char b){
         String resp = "";
         for(int i = 0; i < s.length(); i++){
-            resp = resp +(char)(s.charAt(i) + gerador());
+            if(s.charAt(i) == a){
+                resp += b;
+            }
+            else
+                resp += s.charAt(i);
         }
         return resp;
     }
@@ -24,6 +26,9 @@ class Alteracao{
     public static void main (String[] args){
         String[] entrada = new String[1000];
         int numEntrada = 0;
+        Random gerador = new Random();
+        gerador.setSeed(4);
+        char a, b;
 
         //Leitura da entrada padrao
         do {
@@ -33,7 +38,9 @@ class Alteracao{
 
         //Para cada linha de entrada, gerando uma de saida contendo o numero de letras maiusculas da entrada
         for(int i = 0; i < numEntrada; i++){
-            MyIO.println(converterLinha(entrada[i]));
+            a = gerador(gerador);
+            b = gerador(gerador);
+            MyIO.println(converterLinha(entrada[i], a, b));
         }
     }
 }

@@ -51,5 +51,8 @@ Module.symvers
 Mkfile.old
 dkms.conf
 .vscode
+<<<<<<< HEAD
 .DS_STORE
 .json
+=======
+>>>>>>> 32ce9570a753671654c7cf49f40f338d5a2f1f98
