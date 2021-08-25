@@ -8,43 +8,38 @@ class Algebra{
     }
 
     public static boolean algebrar(String s){
-        char q = s.charAt(0);
+        String operator, resp = "";
+        char q = s.charAt(0), x;
         boolean A = isTrue(s.charAt(2)), B = isTrue(s.charAt(4));
         //MyIO.println(A + " " + B);
-        char x;
         if(q == '2'){
             for(int i = 0; i < s.length(); i++){
                 x = s.charAt(i);
-                if(x == 'n'){
-                    x = '!';
-                    MyIO.print(x);
+                if(x == 't'){
+                    operator = "!";
                 } else if(x == 'a'){
-                    x = '&&';
-                    MyIO.print(x);
-                } else if(x == 'o'){
-                    x = '||';
-                    MyIO.print(x);
+                    operator = "&&";
+                } else if(x == 'r'){
+                    operator = "||";
                 }
             }
-            //MyIO.println(A + " " + B);
+            MyIO.println(A + " " + B);
 
         } else if(q == '3'){
 
             boolean C = isTrue(s.charAt(6));
-            //MyIO.println(A + " " + B + " " + C);
+            
             for(int i = 0; i < s.length(); i++){
                 x = s.charAt(i);
-                if(x == 'n'){
-                    x = '!';
-                    MyIO.print(x);
+                if(x == 't'){
+                    operator = "!";
                 } else if(x == 'a'){
-                    x = '&&';
-                    MyIO.print(x);
-                } else if(x == 'o'){
-                    x = '||';
-                    MyIO.print(x);
+                    operator = "&&";
+                } else if(x == 'r'){
+                    operator = "||";
                 }
             }
+            MyIO.println(A + " " + B + " " + C);
         }
         return A;
     }
