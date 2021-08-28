@@ -7,23 +7,49 @@ class Algebra{
         return (c == '1');
     }
 
+    public static String verifica(char x, boolean A, boolean B, boolean C){
+        String resp = ""; 
+        String operator;
+        if(x == 't'){
+            operator = "!";
+            resp += operator;
+        } else if(x == 'a'){
+            operator = "&&";
+            resp += operator;
+        } else if(x == 'r'){
+            operator = "||";
+            resp += operator;
+        } else if(x == 'o'){
+            resp += "";
+        } else if(x == 'n'){
+            resp += "";
+        } else if(x == 'd'){
+            resp += "";
+        } else if(x >= 48 && x <= 57){
+            resp = resp;
+        } else if(x == 'A'){
+            resp += A;
+        } else if(x == 'B'){
+            resp += B;
+        } else if(x == 'C'){
+            resp += C;
+        } else
+            resp += x;
+        return resp;
+    }
+
     public static boolean algebrar(String s){
-        String operator, resp = "";
+        String resp = "";
         char q = s.charAt(0), x;
-        boolean A = isTrue(s.charAt(2)), B = isTrue(s.charAt(4));
+        boolean A = isTrue(s.charAt(2)), B = isTrue(s.charAt(4)), doido;
         //MyIO.println(A + " " + B);
         if(q == '2'){
             for(int i = 0; i < s.length(); i++){
                 x = s.charAt(i);
-                if(x == 't'){
-                    operator = "!";
-                } else if(x == 'a'){
-                    operator = "&&";
-                } else if(x == 'r'){
-                    operator = "||";
-                }
+                resp += verifica(x, A, B, false);
+                //boolean doido = Boolean.getBoolean(resp);
             }
-            MyIO.println(A + " " + B);
+            MyIO.println(resp);
 
         } else if(q == '3'){
 
@@ -31,15 +57,10 @@ class Algebra{
             
             for(int i = 0; i < s.length(); i++){
                 x = s.charAt(i);
-                if(x == 't'){
-                    operator = "!";
-                } else if(x == 'a'){
-                    operator = "&&";
-                } else if(x == 'r'){
-                    operator = "||";
-                }
+                resp += verifica(x, A, B, C);
+                //boolean doido = Boolean.getBoolean(resp);
             }
-            MyIO.println(A + " " + B + " " + C);
+            MyIO.println(resp);
         }
         return A;
     }
