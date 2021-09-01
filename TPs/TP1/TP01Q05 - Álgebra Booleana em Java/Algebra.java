@@ -1,10 +1,45 @@
 class Algebra{
+    public static String[] expressao = {"!(false)", "!(true)", "||(false,false)", "||(false,true)", "||(true,false)", "||(true,true)", "&&(false,false)",
+    "&&(false,true)", "&&(true,false)", "&&(true,true)", "||(false,false,false)", "||(false,false,true)", "||(false,true,false)", "||(false,true,true)",
+    "||(true,false,false)", "||(true,false,true)", "||(true,true,false)", "||(true,true,true)", "&&(false,false,false)", "&&(false,false,true)", 
+    "&&(false,true,false)", "&&(false,true,true)", "&&(true,false,false)", "&&(true,false,true)", "&&(true,true,false)", "&&(true,true,true)", 
+    "||(false,false,false,false)", "||(false,false,false,true)", "||(false,false,true,false)", "||(false,false,true,true)", "||(false,true,false,false)",
+    "||(false,true,false,true)", "||(false,true,true,false)", "||(false,true,true,true)", "||(true,false,false,false)", "||(true,false,false,true)", 
+    "||(true,false,true,false)", "||(true,false,true,true)", "||(true,true,false,false)", "||(true,true,false,true)", "||(true,true,true,false)", 
+    "||(true,true,true,true)", "&&(false,false,false,false)", "&&(false,false,false,true)", "&&(false,false,true,false)", "&&(false,false,true,true)", 
+    "&&(false,true,false,false)", "&&(false,true,false,true)", "&&(false,true,true,false)", "&&(false,true,true,true)", "&&(true,false,false,false)", 
+    "&&(true,false,false,true)", "&&(true,false,true,false)", "&&(true,false,true,true)", "&&(true,true,false,false)", "&&(true,true,false,true)", 
+    "&&(true,true,true,false)", "&&(true,true,true,true)"};
+
+    public static String[] result = {"1", "0", "0", "1", "1", "1", "0", "0", "0", "1", "0", "1", "1", "1", "1", "1", "1", "1", "0", "0", "0", "0", "0",
+    "0", "0", "1", "0", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
+    "0", "0", "0", "0", "1"};
+
     public static boolean isFim(String s){
         return (s.length() == 1 && s.charAt(0) == '0');
     }
 
     public static boolean isTrue(char c){
         return (c == '1');
+    }
+
+    public static String trim(String s){
+        String resp = "";
+        for(int i = 0; i < s.length(); i++){
+            if(s.charAt(i) != ' ')
+                resp += s.charAt(i);
+        }
+        return resp;
+    }
+
+    public static String replace(String s){
+        for(int i = 0; i < expressao.length - 1; i++){
+            if(s == expressao[i])
+                s = result[i];
+            else
+                
+        }
+        return s;
     }
 
     public static String verifica(char x, boolean A, boolean B, boolean C){
@@ -42,12 +77,13 @@ class Algebra{
         String resp = "";
         char q = s.charAt(0), x;
         boolean A = isTrue(s.charAt(2)), B = isTrue(s.charAt(4)), doido;
-        //MyIO.println(A + " " + B);
         if(q == '2'){
             for(int i = 0; i < s.length(); i++){
                 x = s.charAt(i);
                 resp += verifica(x, A, B, false);
-                //boolean doido = Boolean.getBoolean(resp);
+                resp = trim(resp);
+                resp = replace(resp);
+                //doido = Boolean.getBoolean(resp);
             }
             MyIO.println(resp);
 
@@ -58,7 +94,9 @@ class Algebra{
             for(int i = 0; i < s.length(); i++){
                 x = s.charAt(i);
                 resp += verifica(x, A, B, C);
-                //boolean doido = Boolean.getBoolean(resp);
+                resp = trim(resp);
+                resp = replace(resp);
+                //doido = Boolean.getBoolean(resp);
             }
             MyIO.println(resp);
         }
