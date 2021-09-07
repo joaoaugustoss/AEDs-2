@@ -1,4 +1,5 @@
 class Algebra{
+    //possíveis entradas
     public static String[] expressao = {"!(false)", "!(true)", "||(false,false)", "||(false,true)", "||(true,false)", "||(true,true)", "&&(false,false)",
     "&&(false,true)", "&&(true,false)", "&&(true,true)", "||(false,false,false)", "||(false,false,true)", "||(false,true,false)", "||(false,true,true)",
     "||(true,false,false)", "||(true,false,true)", "||(true,true,false)", "||(true,true,true)", "&&(false,false,false)", "&&(false,false,true)", 
@@ -11,18 +12,22 @@ class Algebra{
     "&&(true,false,false,true)", "&&(true,false,true,false)", "&&(true,false,true,true)", "&&(true,true,false,false)", "&&(true,true,false,true)", 
     "&&(true,true,true,false)", "&&(true,true,true,true)"};
 
-    public static String[] result = {"1", "0", "0", "1", "1", "1", "0", "0", "0", "1", "0", "1", "1", "1", "1", "1", "1", "1", "0", "0", "0", "0", "0",
-    "0", "0", "1", "0", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-    "0", "0", "0", "0", "1"};
+    //possíveis resultados correspondentes às entradas
+    public static String[] result = {"true", "false", "false", "true", "true", "true", "false", "false", "false", "true", "false", "true", "true",
+    "true", "true", "true", "true", "true", "false", "false", "false", "false", "false", "false", "false", "true", "false", "true", "true", "true",
+    "true", "true", "true", "true", "true", "true", "true", "true", "true", "true", "true", "true", "false", "false", "false", "false", "false", "false",
+    "false", "false", "false", "false", "false", "false", "false", "false", "false", "true"};
 
+    //verifica se entrada == "0"
     public static boolean isFim(String s){
         return (s.length() == 1 && s.charAt(0) == '0');
     }
-
+    //verifica o valor das variáveis
     public static boolean isTrue(char c){
         return (c == '1');
     }
 
+    //retira os espaços em branco da string
     public static String trim(String s){
         String resp = "";
         for(int i = 0; i < s.length(); i++){
@@ -33,16 +38,19 @@ class Algebra{
     }
 
     public static String replace(String s){
-        for(int i = 0; i < expressao.length - 1; i++){
-            if(s == expressao[i])
-                s = result[i];
-            else
-                
+        String resp = "";
+        String aux = s.split(",");
+        while(aux){
+            for(int i = 0; i < expressao.length; i++){
+                if(s.equals(expressao[i]))
+                    resp = result[i];
+            }      
         }
-        return s;
+        return resp;
     }
 
-    public static String verifica(char x, boolean A, boolean B, boolean C){
+    //modifica o conteúdo da string para a expressão booleana
+    public static String transform(char x, boolean A, boolean B, boolean C){
         String resp = ""; 
         String operator;
         if(x == 't'){
@@ -73,6 +81,7 @@ class Algebra{
         return resp;
     }
 
+    //faz a manipulação da entrada chamando as outras funções do programa e printa o valor das expressões na tela
     public static boolean algebrar(String s){
         String resp = "";
         char q = s.charAt(0), x;
@@ -80,9 +89,9 @@ class Algebra{
         if(q == '2'){
             for(int i = 0; i < s.length(); i++){
                 x = s.charAt(i);
-                resp += verifica(x, A, B, false);
+                resp += transform(x, A, B, false);
                 resp = trim(resp);
-                resp = replace(resp);
+                //resp = replace(resp);
                 //doido = Boolean.getBoolean(resp);
             }
             MyIO.println(resp);
@@ -93,9 +102,9 @@ class Algebra{
             
             for(int i = 0; i < s.length(); i++){
                 x = s.charAt(i);
-                resp += verifica(x, A, B, C);
+                resp += transform(x, A, B, C);
                 resp = trim(resp);
-                resp = replace(resp);
+                //resp = replace(resp);
                 //doido = Boolean.getBoolean(resp);
             }
             MyIO.println(resp);
@@ -103,6 +112,7 @@ class Algebra{
         return A;
     }
 
+    //função main
     public static void main(String[] args){
         String[] entrada = new String[1000];
         int numEntrada = 0;
