@@ -4,6 +4,158 @@
 #include <ctype.h>
 #include <stdbool.h>
 
+#define MAXTAM    100
+
+Serie array[MAXTAM];
+int n = 0;
+
+/**
+ * Inicializacoes
+ */
+void start(){
+   n = 0;
+}
+
+/**
+ * Insere um elemento na primeira posicao da lista e move os demais
+ * elementos para o fim da 
+ * @param x int elemento a ser inserido.
+ */
+void inserirInicio(Serie x) {
+   int i;
+
+   //validar insercao
+   if(n >= MAXTAM){
+      printf("Erro ao inserir!");
+      exit(1);
+   } 
+
+   //levar elementos para o fim do array
+   for(i = n; i > 0; i--){
+      array[i] = array[i-1];
+   }
+
+   array[0] = x;
+   n++;
+}
+
+/**
+ * Insere um elemento na ultima posicao da 
+ * @param x int elemento a ser inserido.
+ */
+void inserirFim(Serie x) {
+
+   //validar insercao
+   if(n >= MAXTAM){
+      printf("Erro ao inserir!");
+      exit(1);
+   }
+
+   array[n] = x;
+   n++;
+}
+
+/**
+ * Insere um elemento em uma posicao especifica e move os demais
+ * elementos para o fim da 
+ * @param x int elemento a ser inserido.
+ * @param pos Posicao de insercao.
+ */
+void inserir(Serie x, int pos) {
+   int i;
+
+   //validar insercao
+   if(n >= MAXTAM || pos < 0 || pos > n){
+      printf("Erro ao inserir!");
+      exit(1);
+   }
+
+   //levar elementos para o fim do array
+   for(i = n; i > pos; i--){
+      array[i] = array[i-1];
+   }
+
+   array[pos] = x;
+   n++;
+}
+
+/**
+ * Remove um elemento da primeira posicao da lista e movimenta 
+ * os demais elementos para o inicio da mesma.
+ * @return resp int elemento a ser removido.
+ */
+Serie removerInicio() {
+   int i;
+   Serie resp;
+
+   //validar remocao
+   if (n == 0) {
+      printf("Erro ao remover!");
+      exit(1);
+   }
+
+   resp = array[0];
+   n--;
+
+   for(i = 0; i < n; i++){
+      array[i] = array[i+1];
+   }
+
+   return resp;
+}
+
+/**
+ * Remove um elemento da ultima posicao da 
+ * @return resp int elemento a ser removido.
+ */
+Serie removerFim() {
+
+   //validar remocao
+   if (n == 0) {
+      printf("Erro ao remover!");
+      exit(1);
+   }
+
+   return array[--n];
+}
+
+/**
+ * Remove um elemento de uma posicao especifica da lista e 
+ * movimenta os demais elementos para o inicio da mesma.
+ * @param pos Posicao de remocao.
+ * @return resp int elemento a ser removido.
+ */
+Serie remover(int pos) {
+   int i;
+   Serie resp;
+
+   //validar remocao
+   if (n == 0 || pos < 0 || pos >= n) {
+      printf("Erro ao remover!");
+      exit(1);
+   }
+
+   resp = array[pos];
+   n--;
+
+   for(i = pos; i < n; i++){
+      array[i] = array[i+1];
+   }
+
+   return resp;
+}
+
+/**
+ * Mostra os array separados por espacos.
+ */
+void mostrar (Serie *serie){
+    int i;
+
+    for(i = 0; i < n; i++){
+        print(serie[i]);
+    }
+}
+
 typedef struct Serie{
     char name[100];
     char format[100];
@@ -134,7 +286,9 @@ Serie clonar(Serie *serie) {
 //método principal
 int main(){
     char entrada[1000][100];
-    int numEntrada = 0;
+    char fils[1000][100];
+    char file[30][30];
+    int numEntrada = 0, n;
 
     do{
         scanf(" %[^\n]s", entrada[numEntrada]);
@@ -144,7 +298,40 @@ int main(){
 
     for(int i = 0; i < numEntrada; i++){
         read(entrada[i], serie[i]);
+        inserirFim(serie[i]);
     }
+    
+    scanf("%d", &n);
+    char doido[n];
+    for(int i = 0; i < n; i++){
+        scanf(" %[^\n]", doido[i]);
+    }
+
+    Serie passa[30];
+    for(int i = 0; i < n; i++){
+            if(doido[i].strstr("II")){
+                file = doido[i].strtok(" ");
+                passa[i].readClass(file[1]);
+                lista.inserirInicio(passa[i]);
+            } else if(doido[i].contains("I*")){
+                file = doido[i].split(" ");
+                pos = Integer.parseInt(file[1]);
+                passa[i].readClass(file[2]);
+                lista.inserir(pos, passa[i]);
+            } else if(doido[i].contains("IF")){
+                file = doido[i].split(" ");
+                passa[i].readClass(file[1]);
+                lista.inserirFim(passa[i]);
+            } else if(doido[i].contains("RI")){
+                System.out.println("(R) " + lista.removerInicio().getName());
+            } else if(doido[i].contains("R*")){
+                file = doido[i].split(" ");
+                pos = Integer.parseInt(file[1]);
+                System.out.println("(R) " + lista.remover(pos).getName());
+            } else if(doido[i].contains("RF")){
+                System.out.println("(R) " + lista.removerFim().getName());
+            }
+        }
     
     return 0;
 }

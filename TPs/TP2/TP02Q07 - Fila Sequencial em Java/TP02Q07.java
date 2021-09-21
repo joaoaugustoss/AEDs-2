@@ -216,8 +216,6 @@ class Serie{
             while(!br.readLine().contains("N.º de episódios"));
             this.episodes = justInt(removeTags(br.readLine()));
             
-            //método para mostrar a classe
-            this.printClass();
             //fechamento do bufferedReader
             br.close();         
         //Tratamento de exceções
@@ -227,22 +225,109 @@ class Serie{
             System.out.println("Error reading file '" + fileName + "'");
         }
     }
-}         
+}      
+
+//classe Pilha
+class Pilha {
+    private Serie[] series;
+    private int n = 0;
+
+    /**
+    * Construtor da classe.
+    */
+    public Pilha () {
+        this(200);
+    }
+
+    /**
+    * Construtor da classe.
+    * @param tamanho Tamanho da Pilha.
+    */
+    public Pilha (int tamanho){
+        series = new Serie[tamanho];
+        n = 0;
+    }
+
+    /**
+    * Insere um elemento na ultima posicao da pilha.
+    * @param x int elemento a ser inserido.
+    * @throws Exception Se a pilha estiver cheia.
+    */
+    public void inserir(Serie s) throws Exception {
+
+        //validar insercao
+        if(n >= series.length){
+            throw new Exception("Erro ao inserir!");
+        }
+
+        series[n] = s;
+        n++;
+    }
+
+    /**
+    * Remove um elemento da ultima posicao da pilha.
+    * @return resp int elemento a ser removido.
+    * @throws Exception Se a pilha estiver vazia.
+    */
+    public Serie remover() throws Exception {
+
+        //validar remocao
+        if (n == 0) {
+            throw new Exception("Erro ao remover!");
+        }
+
+        return series[--n];
+    }
+
+    /**
+    * Mostra os elementos da pilha separados por espacos.
+    */
+    public void mostrar (){
+        for(int i = n-1; i >= 0; i--){
+            series[i].printClass();
+        }
+    }
+}
 
 //classe main
-public class TP02Q01{
-    public static void main(String[] args){
+public class TP02Q06{
+    public static void main(String[] args) throws Exception{
         String[] entrada = new String[1000];
-        Serie serie = new Serie();
-        int numEntrada = 0;
+        String[] file = new String[10];
+        Serie[] passa = new Serie[30];
+        Pilha pilha = new Pilha();
+        int numEntrada = 0, n = 0, pos = 0;
 
         do{
             entrada[numEntrada] = MyIO.readLine();
         }while(entrada[numEntrada++].equals("FIM") == false);
         numEntrada--;
-
+        
+        //vetor de séries
+        Serie[] serie = new Serie[numEntrada];
         for(int i = 0; i < numEntrada; i++){
-            serie.readClass(entrada[i]);
+            serie[i] = new Serie();
+            serie[i].readClass(entrada[i]);
+            pilha.inserir(serie[i]);
         }
+        
+        n = MyIO.readInt();
+        String[] doido = new String[n];
+
+        for(int i = 0; i < n; i++){
+            doido[i] = MyIO.readLine();
+        }
+
+        for(int i = 0; i < n; i++){
+            passa[i] = new Serie();
+            if(doido[i].contains("I")){
+                file = doido[i].split(" ");
+                passa[i].readClass(file[1]);
+                pilha.inserir(passa[i]);
+            } else if(doido[i].contains("R")){
+                System.out.println("(R) " + pilha.remover().getName());
+            }
+        }
+        pilha.mostrar();
     }
 }

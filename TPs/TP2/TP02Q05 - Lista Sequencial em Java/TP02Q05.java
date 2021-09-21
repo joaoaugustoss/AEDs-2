@@ -216,8 +216,6 @@ class Serie{
             while(!br.readLine().contains("N.º de episódios"));
             this.episodes = justInt(removeTags(br.readLine()));
             
-            //método para mostrar a classe
-            this.printClass();
             //fechamento do bufferedReader
             br.close();         
         //Tratamento de exceções
@@ -227,22 +225,216 @@ class Serie{
             System.out.println("Error reading file '" + fileName + "'");
         }
     }
-}         
+}      
+
+//classe Lista
+class Lista {
+    private Serie[] series;
+    private int n = 0;
+
+    /**
+    * Construtor da classe.
+    */
+    public Lista () {
+        this(200);
+    }
+
+    /**
+    * Construtor da classe.
+    * @param tamanho Tamanho da lista.
+    */
+    public Lista (int tamanho){
+        series = new Serie[tamanho];
+        n = 0;
+    }
+
+    /**
+    * Insere um elemento na primeira posicao da lista e move os demais
+    * elementos para o fim da lista.
+    * @param x int elemento a ser inserido.
+    * @throws Exception Se a lista estiver cheia.
+    */
+    public void inserirInicio(Serie s) throws Exception {
+
+        //validar insercao
+        if(n >= series.length){
+            throw new Exception("Erro ao inserir!");
+        } 
+
+        //levar elementos para o fim do series
+        for(int i = n; i > 0; i--){
+            series[i] = series[i-1];
+        }
+
+        series[0] = s;
+        n++;
+    }
+
+    /**
+    * Insere um elemento na ultima posicao da lista.
+    * @param x int elemento a ser inserido.
+    * @throws Exception Se a lista estiver cheia.
+    */
+    public void inserirFim(Serie s) throws Exception {
+
+        //validar insercao
+        if(n >= series.length){
+            throw new Exception("Erro ao inserir!");
+        }
+
+        series[n] = s;
+        n++;
+    }
+
+    /**
+    * Insere um elemento em uma posicao especifica e move os demais
+    * elementos para o fim da lista.
+    * @param x int elemento a ser inserido.
+    * @param pos Posicao de insercao.
+    * @throws Exception Se a lista estiver cheia ou a posicao invalida.
+    */
+    public void inserir(int pos, Serie s) throws Exception {
+
+        //validar insercao
+        if(n >= series.length || pos < 0 || pos > n){
+            throw new Exception("Erro ao inserir!");
+        }
+
+        //levar elementos para o fim do series
+        for(int i = n; i > pos; i--){
+            series[i] = series[i-1];
+        }
+
+        series[pos] = s;
+        n++;
+    }
+
+    /**
+    * Remove um elemento da primeira posicao da lista e movimenta 
+    * os demais elementos para o inicio da mesma.
+    * @return resp int elemento a ser removido.
+    * @throws Exception Se a lista estiver vazia.
+    */
+    public Serie removerInicio() throws Exception {
+
+        //validar remocao
+        if (n == 0) {
+            throw new Exception("Erro ao remover!");
+        }
+
+        Serie resp = series[0];
+        n--;
+
+        for(int i = 0; i < n; i++){
+            series[i] = series[i+1];
+        }
+
+        return resp;
+    }
+
+    /**
+    * Remove um elemento da ultima posicao da lista.
+    * @return resp int elemento a ser removido.
+    * @throws Exception Se a lista estiver vazia.
+    */
+    public Serie removerFim() throws Exception {
+
+        //validar remocao
+        if (n == 0) {
+            throw new Exception("Erro ao remover!");
+        }
+
+        return series[--n];
+    }
+
+    /**
+    * Remove um elemento de uma posicao especifica da lista e 
+    * movimenta os demais elementos para o inicio da mesma.
+    * @param pos Posicao de remocao.
+    * @return resp int elemento a ser removido.
+    * @throws Exception Se a lista estiver vazia ou a posicao for invalida.
+    */
+    public Serie remover(int pos) throws Exception {
+
+        //validar remocao
+        if (n == 0 || pos < 0 || pos >= n) {
+            throw new Exception("Erro ao remover!");
+        }
+
+        Serie resp = series[pos];
+        n--;
+
+        for(int i = pos; i < n; i++){
+            series[i] = series[i+1];
+        }
+
+        return resp;
+    }
+
+    /**
+    * Mostra os elementos da lista separados por espacos.
+    */
+    public void mostrar (){
+        for(int i = 0; i < n; i++){
+            series[i].printClass();
+        }
+    }
+}
 
 //classe main
-public class TP02Q01{
-    public static void main(String[] args){
+public class TP02Q05{
+    public static void main(String[] args) throws Exception{
         String[] entrada = new String[1000];
-        Serie serie = new Serie();
-        int numEntrada = 0;
+        String[] file = new String[10];
+        Serie[] passa = new Serie[30];
+        Lista lista = new Lista();
+        int numEntrada = 0, n = 0, pos = 0;
 
         do{
             entrada[numEntrada] = MyIO.readLine();
         }while(entrada[numEntrada++].equals("FIM") == false);
         numEntrada--;
-
+        
+        //vetor de séries
+        Serie[] serie = new Serie[numEntrada];
         for(int i = 0; i < numEntrada; i++){
-            serie.readClass(entrada[i]);
+            serie[i] = new Serie();
+            serie[i].readClass(entrada[i]);
+            lista.inserirFim(serie[i]);
         }
+        
+        n = MyIO.readInt();
+        String[] doido = new String[n];
+
+        for(int i = 0; i < n; i++){
+            doido[i] = MyIO.readLine();
+        }
+
+        for(int i = 0; i < n; i++){
+            passa[i] = new Serie();
+            if(doido[i].contains("II")){
+                file = doido[i].split(" ");
+                passa[i].readClass(file[1]);
+                lista.inserirInicio(passa[i]);
+            } else if(doido[i].contains("I*")){
+                file = doido[i].split(" ");
+                pos = Integer.parseInt(file[1]);
+                passa[i].readClass(file[2]);
+                lista.inserir(pos, passa[i]);
+            } else if(doido[i].contains("IF")){
+                file = doido[i].split(" ");
+                passa[i].readClass(file[1]);
+                lista.inserirFim(passa[i]);
+            } else if(doido[i].contains("RI")){
+                System.out.println("(R) " + lista.removerInicio().getName());
+            } else if(doido[i].contains("R*")){
+                file = doido[i].split(" ");
+                pos = Integer.parseInt(file[1]);
+                System.out.println("(R) " + lista.remover(pos).getName());
+            } else if(doido[i].contains("RF")){
+                System.out.println("(R) " + lista.removerFim().getName());
+            }
+        }
+        lista.mostrar();
     }
 }

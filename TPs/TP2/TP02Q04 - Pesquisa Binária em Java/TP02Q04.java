@@ -229,27 +229,29 @@ public class TP02Q04{
         String[] entrada = new String[1000];
         String[] pesquisa = new String[1000];
         int numEntrada = 0, numEntrada2 = 0;
-
+        //leitura do nome do arquivo a ser aberto
         do{
             entrada[numEntrada] = MyIO.readLine();
             count++;
         }while(entrada[numEntrada++].equals("FIM") == false);
         numEntrada--;
-
+        //leitura da entrada a ser pesquisada
         do{
             pesquisa[numEntrada2] = MyIO.readLine();
             count++;
         }while(pesquisa[numEntrada2++].equals("FIM") == false);
         numEntrada2--;
-
+        //declaração do vetor de series com o tamanho de numEntrada
         Serie[] serie = new Serie[numEntrada];
-        
+        //salvar as series e fazer a leitura dos dados
         for(int i = 0; i < numEntrada; i++){
             count++;
             serie[i] = new Serie();
             serie[i].readClass(entrada[i]);
         }
-
+        //chamada para ordenar o vetor de series
+        sort(serie);
+        //recepção dos resultados da pesquisa e print na tela
         for(int i = 0; i < numEntrada2; i++){
             count++;
             if(pesqBin(serie, pesquisa[i])){
@@ -299,5 +301,20 @@ public class TP02Q04{
             }
         }
         return resp;
+    }
+    //método para ordenar o vetor de strings
+    public static void sort(Serie[] serie) {
+        int n = serie.length;
+		for (int i = 1; i < n; i++) {
+            count++;
+			Serie tmp = serie[i];
+            int j = i - 1;
+            while ((j >= 0) && (serie[j].getName().compareTo(tmp.getName()) > 0)) {
+                count++;
+                serie[j + 1] = serie[j];
+                j--;
+            }
+            serie[j + 1] = tmp;
+        }
     }
 }

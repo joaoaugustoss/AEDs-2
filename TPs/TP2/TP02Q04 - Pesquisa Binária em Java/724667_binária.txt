@@ -1,2 +1,2 @@
-Tempo de execução: 18.502s
-Número de comparações: 7
+Tempo de execução: 0.157s
+Número de comparações: 498
