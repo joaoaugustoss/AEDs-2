@@ -227,75 +227,103 @@ class Serie{
     }
 }      
 
-//classe Pilha
-class Pilha {
-    private Serie[] series;
-    private int n = 0;
+//classe Fila
+class Fila {
+    private Serie[] array;
+    private int primeiro; // Remove do indice "primeiro".
+    private int ultimo; // Insere no indice "ultimo".
+
 
     /**
-    * Construtor da classe.
+        * Construtor da classe.
     */
-    public Pilha () {
-        this(200);
+    public Fila () {
+        this(5);
     }
 
     /**
-    * Construtor da classe.
-    * @param tamanho Tamanho da Pilha.
+        * Construtor da classe.
+        * @param tamanho Tamanho da fila.
     */
-    public Pilha (int tamanho){
-        series = new Serie[tamanho];
-        n = 0;
+    public Fila (int tamanho){
+        array = new Serie[tamanho+1];
+        primeiro = ultimo = 0;
+    }
+
+    public int media(){
+        double avg = 0.0;
+        for(int i = primeiro; i != ultimo; i = ((i + 1) % array.length)){
+            avg += array[i].getSeasons();
+        }
+        avg /= tamanho();
+        return (int)Math.round(avg);
+    }
+
+    public int tamanho(){
+        int tam = 0;
+        for(int i = primeiro; i != ultimo; i = ((i + 1) % array.length)){
+            tam += 1;
+        }
+        return tam;
     }
 
     /**
-    * Insere um elemento na ultima posicao da pilha.
-    * @param x int elemento a ser inserido.
-    * @throws Exception Se a pilha estiver cheia.
+        * Insere um elemento na ultima posicao da fila.
+        * @param x int elemento a ser inserido.
+        * @throws Exception Se a fila estiver cheia.
     */
-    public void inserir(Serie s) throws Exception {
+    public void inserir(Serie x) throws Exception {
 
         //validar insercao
-        if(n >= series.length){
-            throw new Exception("Erro ao inserir!");
+        //System.out.println("Último para o if: " + (ultimo + 1) % array.length + " TAM: " + tamanho());
+        if (tamanho() == array.length - 1) {
+            remover();
         }
 
-        series[n] = s;
-        n++;
+        array[ultimo] = x;
+        //System.out.println("Primeiro: " + primeiro + "\tarray[ultimo]: " + array[ultimo].getName() + "\tÚltimo: " + ultimo);
+        ultimo = (ultimo + 1) % array.length;
+        System.out.println(media());
     }
 
     /**
-    * Remove um elemento da ultima posicao da pilha.
-    * @return resp int elemento a ser removido.
-    * @throws Exception Se a pilha estiver vazia.
+        * Remove um elemento da primeira posicao da fila e movimenta 
+        * os demais elementos para o primeiro da mesma.
+        * @return resp int elemento a ser removido.
+        * @throws Exception Se a fila estiver vazia.
     */
     public Serie remover() throws Exception {
 
         //validar remocao
-        if (n == 0) {
+
+        //System.out.println("Primeiro: " + primeiro + "\tÚltimo: " + ultimo + "\tTamanho: " + tamanho());
+        if (tamanho() < 0) {
             throw new Exception("Erro ao remover!");
         }
 
-        return series[--n];
+        Serie resp = array[primeiro];
+        //System.out.println("Primeiro: " + primeiro + "\tarray[primeiro]: " + array[primeiro].getName() + "\tÚltimo: " + ultimo);
+        primeiro = (primeiro + 1) % array.length;
+        return resp;
     }
 
     /**
-    * Mostra os elementos da pilha separados por espacos.
-    */
+        * Mostra os array separados por espacos.
+        */
     public void mostrar (){
-        for(int i = n-1; i >= 0; i--){
-            series[i].printClass();
+        for(int i = primeiro; i != ultimo; i = ((i + 1) % array.length)) {
+            System.out.println(array[i].getName());
         }
     }
 }
 
 //classe main
-public class TP02Q06{
+public class TP02Q07{
     public static void main(String[] args) throws Exception{
         String[] entrada = new String[1000];
         String[] file = new String[10];
         Serie[] passa = new Serie[30];
-        Pilha pilha = new Pilha();
+        Fila fila = new Fila();
         int numEntrada = 0, n = 0, pos = 0;
 
         do{
@@ -307,13 +335,13 @@ public class TP02Q06{
         Serie[] serie = new Serie[numEntrada];
         for(int i = 0; i < numEntrada; i++){
             serie[i] = new Serie();
-            serie[i].readClass(entrada[i]);
-            pilha.inserir(serie[i]);
+            serie[i].readClass(entrada[i]);    
+            fila.inserir(serie[i]);    
         }
         
         n = MyIO.readInt();
         String[] doido = new String[n];
-
+        
         for(int i = 0; i < n; i++){
             doido[i] = MyIO.readLine();
         }
@@ -323,11 +351,10 @@ public class TP02Q06{
             if(doido[i].contains("I")){
                 file = doido[i].split(" ");
                 passa[i].readClass(file[1]);
-                pilha.inserir(passa[i]);
+                fila.inserir(passa[i]);
             } else if(doido[i].contains("R")){
-                System.out.println("(R) " + pilha.remover().getName());
+                fila.remover();
             }
         }
-        pilha.mostrar();
     }
 }
