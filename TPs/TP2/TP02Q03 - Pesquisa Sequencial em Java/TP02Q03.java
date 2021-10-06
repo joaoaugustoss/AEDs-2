@@ -164,7 +164,10 @@ class Serie{
         }
         return resp.substring(0, resp.length()-5); //retorno da substring resp retirando os 5 últimos caracteres relacionados à extensão do arquivo
     }
-    //método para leitura do arquivo .html e tratamento das linhas
+    /**
+     * método para leitura do arquivo .html e tratamento das linhas
+     * @param fileName
+     */
     public void readClass(String fileName){
         String line;
         String resp = "";
@@ -179,27 +182,27 @@ class Serie{
             
             //set Formato da série
             while(!br.readLine().contains("Formato"));
-            this.format = removeTags(br.readLine());
+            this.format = removeTags(br.readLine()).trim();
 
             //set duração da série
             while(!br.readLine().contains("Duração"));
-            this.duration = removeTags(br.readLine());
+            this.duration = removeTags(br.readLine()).trim();
 
             //set país da série
             while(!br.readLine().contains("País de origem"));
-            this.country = removeTags(br.readLine());
+            this.country = removeTags(br.readLine()).trim();
 
             //set idioma da série
             while(!br.readLine().contains("Idioma original"));
-            this.language = removeTags(br.readLine());
+            this.language = removeTags(br.readLine()).trim();
 
             //set emissora da série
             while(!br.readLine().contains("Emissora de televisão"));
-            this.broadcaster = removeTags(br.readLine());
+            this.broadcaster = removeTags(br.readLine()).trim();
 
             //set transmissão original da série
             while(!br.readLine().contains("Transmissão original"));
-            this.streaming = removeTags(br.readLine());
+            this.streaming = removeTags(br.readLine()).trim();
 
             //set temporadas da série
             while(!br.readLine().contains("N.º de temporadas"));
@@ -208,7 +211,6 @@ class Serie{
             //set episódios da série
             while(!br.readLine().contains("N.º de episódios"));
             this.episodes = justInt(removeTags(br.readLine()));
-            
             //fechamento do bufferedReader
             br.close();         
         //Tratamento de exceções

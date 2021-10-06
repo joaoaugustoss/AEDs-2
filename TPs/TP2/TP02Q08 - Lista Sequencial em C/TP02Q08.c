@@ -299,7 +299,7 @@ int main(){
         if(strstr(batata, "II")){
             file = strtok(batata, " ");
             file = strtok(NULL, " ");
-        		passa = (Serie*)malloc(sizeof(Serie));
+        	passa = (Serie*)malloc(sizeof(Serie));
             read(file, passa);
             inserirInicio(passa);
         } else if(strstr(batata,"I*")){
@@ -307,13 +307,13 @@ int main(){
             file = strtok(NULL, " ");
             pos = atoi(file);
             file = strtok(NULL, " ");
-        		passa = (Serie*)malloc(sizeof(Serie));
+        	passa = (Serie*)malloc(sizeof(Serie));
             read(file, passa);
             inserir(passa, pos);
         } else if(strstr(batata, "IF")){
             file = strtok(batata, " ");
             file = strtok(NULL, " ");
-        		passa = (Serie*)malloc(sizeof(Serie));
+        	passa = (Serie*)malloc(sizeof(Serie));
             read(file, passa);
             inserirFim(passa);
         } else if(strstr(batata, "RI")){
