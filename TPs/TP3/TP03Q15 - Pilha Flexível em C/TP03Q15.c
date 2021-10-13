@@ -25,7 +25,7 @@ void print(Serie *serie){
 }
 //método para tratamento dos atributos que recebem número inteiro, convertendo de char para int
 int justInt(char line[]){
-    char *resp = (char *)malloc(sizeof(strlen(line)));
+    char *resp = (char *)malloc(sizeof(strlen(line) + 1));
     for(int i = 0; i < strlen(line); i++){
         if(line[i] >= '0' && line[i] <= '9'){
             resp[i] = line[i];
@@ -36,7 +36,7 @@ int justInt(char line[]){
 }
 //método para a remoção das tags lidas nas linhas
 char* removeTags(char s[]){
-    char *resp = (char *)malloc(sizeof(strlen(s)));
+    char *resp = (char *)malloc(sizeof(char) * strlen(s));
     int i = 0, j = 0;
     while(i < strlen(s)){
         if(s[i] == '<'){
@@ -57,7 +57,7 @@ char* removeTags(char s[]){
 //método para tratar o nome do arquivo lido e retorná-lo sem caracteres especiais
 char* getName(char fileName[]){
     char *teste;
-    char *resp = (char *)malloc(sizeof(strlen(fileName)));
+    char *resp = (char *)malloc(sizeof(char) * strlen(fileName));
     for(int i = 0; i < strlen(fileName); i++){
         if(fileName[i]  == '_'){
             resp[i] = ' ';
@@ -73,6 +73,32 @@ char* getName(char fileName[]){
 //método para testar se a entrada == FIM para finalizar as entradas
 bool isFim(char s[]){
     return (strlen(s) == 3 && s[0] == 'F' && s[1] == 'I' && s[2] == 'M');
+}
+
+char* blank(char* s){
+    char* resp = (char*) malloc(strlen(s) * sizeof(char));
+    if(s[0] == ' ' && s[strlen(s) - 1] == ' '){
+        for(int i = 1; i < strlen(s) - 1; i++){
+            resp[i-1] = s[i];
+            resp[i] = '\0';
+        }
+    } else if(s[0] == ' '){
+        for(int i = 1; i < strlen(s); i++){
+            resp[i-1] = s[i];
+            resp[i] = '\0';
+        }
+    } else if(s[strlen(s) - 1] == ' '){
+        for(int i = 0; i < strlen(s) - 1; i++){
+            resp[i] = s[i];
+            resp[i + 1] = '\0';
+        }
+    } else {
+        for(int i = 0; i < strlen(s); i++){
+            resp[i] = s[i];
+            resp[i + 1] = '\0';
+        }
+    }
+    return resp;
 }
 //método para leitura do arquivo html e tratamento do mesmo
 void read(char *fileName, Serie *serie){

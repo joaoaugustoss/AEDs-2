@@ -26,7 +26,7 @@ void print(Serie *serie){
 }
 //método para tratamento dos atributos que recebem número inteiro, convertendo de char para int
 int justInt(char line[]){
-    char *resp = (char *)malloc(sizeof(strlen(line)));
+    char *resp = (char *)malloc(sizeof(strlen(line) + 1));
     for(int i = 0; i < strlen(line); i++){
         if(line[i] >= '0' && line[i] <= '9'){
             resp[i] = line[i];
@@ -37,7 +37,7 @@ int justInt(char line[]){
 }
 //método para a remoção das tags lidas nas linhas
 char* removeTags(char s[]){
-    char *resp = (char *)malloc(sizeof(strlen(s)));
+    char *resp = (char *)malloc(sizeof(char) * strlen(s));
     int i = 0, j = 0;
     while(i < strlen(s)){
         if(s[i] == '<'){
@@ -58,7 +58,7 @@ char* removeTags(char s[]){
 //método para tratar o nome do arquivo lido e retorná-lo sem caracteres especiais
 char* getName(char fileName[]){
     char *teste;
-    char *resp = (char *)malloc(sizeof(strlen(fileName)));
+    char *resp = (char *)malloc(sizeof(char) * strlen(fileName));
     for(int i = 0; i < strlen(fileName); i++){
         if(fileName[i]  == '_'){
             resp[i] = ' ';

@@ -2,7 +2,9 @@ import java.io.*;
 import java.io.FileReader;
 
 class Serie{
-    //declaração dos atributos
+    /** 
+     * declaração dos atributos
+     */
     private String name;
     private String format;
     private String duration;
@@ -12,7 +14,9 @@ class Serie{
     private String streaming;
     private int seasons;
     private int episodes;
-    //construtor primário
+    /**
+     * construtor primário
+     */
     public Serie(){
         name = "";
         format = "";
@@ -24,7 +28,10 @@ class Serie{
         seasons = 0;
         episodes = 0;
     }
-    //construtor secundário
+    /**
+     * construtor secundário
+     * @param allSerie
+     */
     public Serie(String name, String format, String duration, String country, String language, String broadcaster, String streaming, int seasons, 
     int episodes){
         this.name = name;
@@ -37,79 +44,126 @@ class Serie{
         this.seasons = seasons;
         this.episodes = episodes;
     }
-    //método para setar o atributo name
+    /**
+     * método para setar o atributo name
+     * @param name
+     */
     public void setName(String name){
         this.name = name;
     }
-    //método para setar o atributo formato
+    /**
+     * método para setar o atributo formato
+     * @param format
+     */
     public void setFormat(String format){
         this.format = format;
     }
-    //método para setar o atributo duration
+    /**
+     * método para setar o atributo duration
+     * @param duration
+     */
     public void setDuration(String duration){
         this.duration = duration;
     }
-    //método para setar o atributo country
+    /**
+     * método para setar o atributo country
+     * @param country
+     */
     public void setCountry(String country){
         this.country = country;
     }
-    //método para setar o atributo language
+    /**
+     * método para setar o atributo language
+     * @param language
+     */
     public void setLanguage(String language){
         this.language = language;
     }
-    //método para setar o atributo broadcaster
+    /**
+     * método para setar o atributo broadcaster
+     * @param broadcaster
+     */
     public void setBroadcaster(String broadcaster){
         this.broadcaster = broadcaster;
     }
-    //método para setar o atributo streaming
+    /**
+     * método para setar o atributo streaming
+     * @param streaming
+     */
     public void setStreaming(String streaming){
         this.streaming = streaming;
     }
-    //método para setar o atributo seasons
+    /**
+     * método para setar o atributo seasons
+     * @param seasons
+     */
     public void setSeasons(int seasons){
         this.seasons = seasons;
     }
-    //método para setar o atributo episodes
+    /**
+     * método para setar o atributo episodes
+     * @param episodes
+     */
     public void setEpisodes(int episodes){
         this.episodes = episodes;
     }
-    //método para retornar o atributo name
+    /**
+     * método para retornar o atributo name
+     */
     public String getName(){ 
         return this.name; 
     }
-    //método para retornar o atributo format
+    /**
+     * método para retornar o atributo format
+     */
     public String getFormat(){ 
         return this.format; 
     }
-    //método para retornar o atributo duration
+    /**
+     * método para retornar o atributo duration
+     */
     public String getDuration(){ 
         return this.duration; 
     }
-    //método para retornar o atributo country
+    /**
+     * método para retornar o atributo country
+     */
     public String getCountry(){ 
         return this.country; 
     }
-    //método para retornar o atributo language
+    /**
+     * método para retornar o atributo language
+     */
     public String getLanguage(){ 
         return this.language; 
     }
-    //método para retornar o atributo broadcaster
+    /**
+     * método para retornar o atributo broadcaster
+     */
     public String getBroadcaster(){ 
         return this.broadcaster; 
     }
-    //método para retornar o atributo streaming
+    /**
+     * método para retornar o atributo streaming
+     */
     public String getStreaming(){ 
         return this.streaming; 
     }
-    //método para retornar o atributo seasons
+    /**
+     * método para retornar o atributo seasons
+     */
     public int getSeasons(){ 
         return this.seasons; 
     }
-    //método para retornar o atributo episodes
+    /**
+     * método para retornar o atributo episodes
+     */
     public int getEpisodes(){ 
         return this.episodes; 
     }
-    //método para clonar a classe
+    /**
+     * método para clonar a classe
+     */
     public Serie clone(){
         Serie resp = new Serie();
         resp.name = this.name;
@@ -123,12 +177,17 @@ class Serie{
         resp.episodes = this.episodes;
         return resp;
     }
-    //método para printar a classe
+    /**
+     * método para printar a classe
+     */
     public void printClass(){
         System.out.println(this.name + " " + this.format + " " + this.duration + " " + this.country + " " + this.language + " " + this.broadcaster + " " +
         this.streaming + " " + this.seasons + " " + this.episodes);
     }
-    //método para tratar a linha, deixar apenas números e converter o retorno de String para Integer
+    /**
+     * método para tratar a linha, deixar apenas números e converter o retorno de String para Integer
+     * @param line
+     */
     public int justInt(String line){
         String resp = "";
         for(int i = 0; i < line.length(); i++){
@@ -140,7 +199,10 @@ class Serie{
         }
         return Integer.parseInt(resp); //conversão da string resp para número inteiro a ser retornado
     }
-    //método para a remoção das tags da linha lida do arquivo para retornar apenas o que é desejado
+    /**
+     * método para a remoção das tags da linha lida do arquivo para retornar apenas o que é desejado
+     * @param line
+     */
     public String removeTags(String line){
         String resp = "";
         int i = 0;
@@ -159,7 +221,10 @@ class Serie{
         //System.out.println(resp);
         return resp;
     }
-    //método para tratar o nome do arquivo e retornar o nome da série
+    /**
+     * método para tratar o nome do arquivo e retornar o nome da série
+     * @param fileName
+     */
     public String searchName(String fileName){
         String resp = "";
         for(int i = 0; i < fileName.length(); i++){
@@ -227,7 +292,186 @@ class Serie{
             System.out.println("Error reading file '" + fileName + "'");
         }
     }
+}     
 
+class Celula {
+	public Serie elemento; // Elemento inserido na celula.
+	public Celula prox; // Aponta a celula prox.
+
+	/**
+	 * Construtor da classe.
+	*/
+	public Celula() {
+		this(null);
+	}
+
+	/**
+	 * Construtor da classe.
+	 * @param elemento int inserido na celula.
+	*/
+	public Celula(Serie elemento) {
+        this.elemento = elemento;
+        this.prox = null;
+	}
+}
+
+//classe Lista
+class Lista {
+    private Serie[] series;
+    private int n = 0;
+	private Celula primeiro;
+	private Celula ultimo;
+
+	/**
+	 * Construtor da classe que cria uma lista sem elementos (somente no cabeca).
+	*/
+	public Lista() {
+		primeiro = new Celula();
+		ultimo = primeiro;
+	}
+
+	/**
+	 * Insere um elemento na primeira posicao da lista.
+    * @param x int elemento a ser inserido.
+	 */
+	public void inserirInicio(Serie x) {
+		Celula tmp = new Celula(x);
+        tmp.prox = primeiro.prox;
+		primeiro.prox = tmp;
+		if (primeiro == ultimo) {                 
+			ultimo = tmp;
+		}
+        tmp = null;
+	}
+
+	/**
+	 * Insere um elemento na ultima posicao da lista.
+    * @param x int elemento a ser inserido.
+	 */
+	public void inserirFim(Serie x) {
+		ultimo.prox = new Celula(x);
+		ultimo = ultimo.prox;
+	}
+
+	/**
+	 * Remove um elemento da primeira posicao da lista.
+    * @return resp int elemento a ser removido.
+	 * @throws Exception Se a lista nao contiver elementos.
+	 */
+	public Serie removerInicio() throws Exception {
+		if (primeiro == ultimo) {
+			throw new Exception("Erro ao remover (vazia)!");
+		}
+
+        Celula tmp = primeiro;
+        primeiro = primeiro.prox;
+        Serie resp = primeiro.elemento;
+        tmp.prox = null;
+        tmp = null;
+		return resp;
+	}
+
+	/**
+	 * Remove um elemento da ultima posicao da lista.
+    * @return resp int elemento a ser removido.
+	 * @throws Exception Se a lista nao contiver elementos.
+	 */
+	public Serie removerFim() throws Exception {
+		if (primeiro == ultimo) {
+			throw new Exception("Erro ao remover (vazia)!");
+		} 
+
+		// Caminhar ate a penultima celula:
+        Celula i;
+        for(i = primeiro; i.prox != ultimo; i = i.prox);
+
+        Serie resp = ultimo.elemento; 
+        ultimo = i; 
+        i = ultimo.prox = null;
+      
+		return resp;
+	}
+
+	/**
+    * Insere um elemento em uma posicao especifica considerando que o 
+    * primeiro elemento valido esta na posicao 0.
+    * @param x int elemento a ser inserido.
+	 * @param pos int posicao da insercao.
+	 * @throws Exception Se <code>posicao</code> invalida.
+	 */
+   public void inserir(Serie x, int pos) throws Exception {
+        int tamanho = tamanho();
+
+        if(pos < 0 || pos > tamanho){
+                throw new Exception("Erro ao inserir posicao (" + pos + " / tamanho = " + tamanho + ") invalida!");
+        } else if (pos == 0){
+            inserirInicio(x);
+        } else if (pos == tamanho){
+            inserirFim(x);
+        } else {
+            // Caminhar ate a posicao anterior a insercao
+            Celula i = primeiro;
+            for(int j = 0; j < pos; j++, i = i.prox);
+            
+            Celula tmp = new Celula(x);
+            tmp.prox = i.prox;
+            i.prox = tmp;
+            tmp = i = null;
+        }
+    }
+
+	/**
+    * Remove um elemento de uma posicao especifica da lista
+    * considerando que o primeiro elemento valido esta na posicao 0.
+	 * @param posicao Meio da remocao.
+    * @return resp int elemento a ser removido.
+	 * @throws Exception Se <code>posicao</code> invalida.
+	 */
+	public Serie remover(int pos) throws Exception {
+        Serie resp;
+        int tamanho = tamanho();
+
+            if (primeiro == ultimo){
+                throw new Exception("Erro ao remover (vazia)!");
+
+        } else if(pos < 0 || pos >= tamanho){
+                throw new Exception("Erro ao remover (posicao " + pos + " / " + tamanho + " invalida!");
+        } else if (pos == 0){
+            resp = removerInicio();
+        } else if (pos == tamanho - 1){
+            resp = removerFim();
+        } else {
+            // Caminhar ate a posicao anterior a insercao
+            Celula i = primeiro;
+            for(int j = 0; j < pos; j++, i = i.prox);
+            
+            Celula tmp = i.prox;
+            resp = tmp.elemento;
+            i.prox = tmp.prox;
+            tmp.prox = null;
+            i = tmp = null;
+        }
+		return resp;
+	}
+
+    public int tamanho() {
+        int tamanho = 0; 
+        for(Celula i = primeiro; i != ultimo; i = i.prox, tamanho++);
+        return tamanho;
+    }
+
+	/**
+	 * Mostra os elementos da lista separados por espacos.
+	 */
+	public void mostrar() {
+		for (Celula i = primeiro.prox; i != null; i = i.prox) {
+            i.elemento.printClass();
+		}
+	}
+}
+
+//classe main
+public class TP03Q11{
     public static void main(String[] args) throws Exception{
         String[] entrada = new String[1000];
         String[] file = new String[10];
@@ -282,187 +526,4 @@ class Serie{
         }
         lista.mostrar();
     }
-}      
-
-class Celula {
-	public Serie elemento; // Elemento inserido na celula.
-	public Celula prox; // Aponta a celula prox.
-
-	/**
-	 * Construtor da classe.
-	*/
-	public Celula() {
-		this(null);
-	}
-
-	/**
-	 * Construtor da classe.
-	 * @param elemento int inserido na celula.
-	*/
-	public Celula(Serie elemento) {
-        this.elemento = elemento;
-        this.prox = null;
-	}
-}
-
-//classe Lista
-class Lista {
-    private Serie[] series;
-    private int n = 0;
-	private Celula primeiro;
-	private Celula ultimo;
-
-
-	/**
-	 * Construtor da classe que cria uma lista sem elementos (somente no cabeca).
-	*/
-	public Lista() {
-		primeiro = new Celula();
-		ultimo = primeiro;
-	}
-
-
-	/**
-	 * Insere um elemento na primeira posicao da lista.
-    * @param x int elemento a ser inserido.
-	 */
-	public void inserirInicio(Serie x) {
-		Celula tmp = new Celula(x);
-        tmp.prox = primeiro.prox;
-		primeiro.prox = tmp;
-		if (primeiro == ultimo) {                 
-			ultimo = tmp;
-		}
-        tmp = null;
-	}
-
-
-	/**
-	 * Insere um elemento na ultima posicao da lista.
-    * @param x int elemento a ser inserido.
-	 */
-	public void inserirFim(Serie x) {
-		ultimo.prox = new Celula(x);
-		ultimo = ultimo.prox;
-	}
-
-
-	/**
-	 * Remove um elemento da primeira posicao da lista.
-    * @return resp int elemento a ser removido.
-	 * @throws Exception Se a lista nao contiver elementos.
-	 */
-	public Serie removerInicio() throws Exception {
-		if (primeiro == ultimo) {
-			throw new Exception("Erro ao remover (vazia)!");
-		}
-
-        Celula tmp = primeiro;
-        primeiro = primeiro.prox;
-        Serie resp = primeiro.elemento;
-        tmp.prox = null;
-        tmp = null;
-		return resp;
-	}
-
-
-	/**
-	 * Remove um elemento da ultima posicao da lista.
-    * @return resp int elemento a ser removido.
-	 * @throws Exception Se a lista nao contiver elementos.
-	 */
-	public Serie removerFim() throws Exception {
-		if (primeiro == ultimo) {
-			throw new Exception("Erro ao remover (vazia)!");
-		} 
-
-		// Caminhar ate a penultima celula:
-        Celula i;
-        for(i = primeiro; i.prox != ultimo; i = i.prox);
-
-        Serie resp = ultimo.elemento; 
-        ultimo = i; 
-        i = ultimo.prox = null;
-      
-		return resp;
-	}
-
-
-	/**
-    * Insere um elemento em uma posicao especifica considerando que o 
-    * primeiro elemento valido esta na posicao 0.
-    * @param x int elemento a ser inserido.
-	 * @param pos int posicao da insercao.
-	 * @throws Exception Se <code>posicao</code> invalida.
-	 */
-   public void inserir(Serie x, int pos) throws Exception {
-        int tamanho = tamanho();
-
-        if(pos < 0 || pos > tamanho){
-                throw new Exception("Erro ao inserir posicao (" + pos + " / tamanho = " + tamanho + ") invalida!");
-        } else if (pos == 0){
-            inserirInicio(x);
-        } else if (pos == tamanho){
-            inserirFim(x);
-        } else {
-            // Caminhar ate a posicao anterior a insercao
-            Celula i = primeiro;
-            for(int j = 0; j < pos; j++, i = i.prox);
-            
-            Celula tmp = new Celula(x);
-            tmp.prox = i.prox;
-            i.prox = tmp;
-            tmp = i = null;
-        }
-    }
-
-
-	/**
-    * Remove um elemento de uma posicao especifica da lista
-    * considerando que o primeiro elemento valido esta na posicao 0.
-	 * @param posicao Meio da remocao.
-    * @return resp int elemento a ser removido.
-	 * @throws Exception Se <code>posicao</code> invalida.
-	 */
-	public Serie remover(int pos) throws Exception {
-        Serie resp;
-        int tamanho = tamanho();
-
-            if (primeiro == ultimo){
-                throw new Exception("Erro ao remover (vazia)!");
-
-        } else if(pos < 0 || pos >= tamanho){
-                throw new Exception("Erro ao remover (posicao " + pos + " / " + tamanho + " invalida!");
-        } else if (pos == 0){
-            resp = removerInicio();
-        } else if (pos == tamanho - 1){
-            resp = removerFim();
-        } else {
-            // Caminhar ate a posicao anterior a insercao
-            Celula i = primeiro;
-            for(int j = 0; j < pos; j++, i = i.prox);
-            
-            Celula tmp = i.prox;
-            resp = tmp.elemento;
-            i.prox = tmp.prox;
-            tmp.prox = null;
-            i = tmp = null;
-        }
-		return resp;
-	}
-
-    public int tamanho() {
-        int tamanho = 0; 
-        for(Celula i = primeiro; i != ultimo; i = i.prox, tamanho++);
-        return tamanho;
-    }
-
-	/**
-	 * Mostra os elementos da lista separados por espacos.
-	 */
-	public void mostrar() {
-		for (Celula i = primeiro.prox; i != null; i = i.prox) {
-            i.elemento.printClass();
-		}
-	}
 }

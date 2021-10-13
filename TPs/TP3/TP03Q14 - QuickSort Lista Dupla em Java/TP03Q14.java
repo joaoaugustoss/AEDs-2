@@ -335,17 +335,17 @@ class ListaDupla {
 		ultimo = ultimo.prox;
 	}
 
-    public void sort() {
-        quicksort(0, n-1);
+    /*public void sort() {
+        quicksort(primeiro, ultimo);
     }
 
 	/**
 	 * Algoritmo de ordenacao Quicksort.
      * @param int esq inicio do serie a ser ordenado
      * @param int dir fim do serie a ser ordenado
-	 */
-    private void quicksort(int esq, int dir) {
-        int i = esq, j = dir;
+	 
+    private void quicksort(CelulaDupla esq, CelulaDupla dir) {
+        CelulaDupla i = primeiro, j = ultimo;
         mov++;
         Serie pivo = series[(dir+esq)/2];
         while (i <= j) {
@@ -368,10 +368,9 @@ class ListaDupla {
         }
         if (esq < j)  quicksort(esq, j);
         if (i < dir)  quicksort(i, dir);
-    }
+    }*/
 
     public void swap(int i, int j) {
-        mov += 3;
         Serie temp = series[i];
         series[i] = series[j];
         series[j] = temp;
@@ -406,7 +405,7 @@ class TP03Q14{
             lista.inserirFim(serie[i]);
         }
 
-        lista.sort();
+        //lista.sort();
 
         lista.mostrar();
         long fim = now();

@@ -26,7 +26,7 @@ void print(Serie *serie){
 }
 //método para tratamento dos atributos que recebem número inteiro, convertendo de char para int
 int justInt(char line[]){
-    char *resp = (char *)malloc(sizeof(strlen(line)));
+    char *resp = (char *)malloc(sizeof(strlen(line) + 1));
     for(int i = 0; i < strlen(line); i++){
         if(line[i] >= '0' && line[i] <= '9'){
             resp[i] = line[i];
@@ -37,7 +37,7 @@ int justInt(char line[]){
 }
 //método para a remoção das tags lidas nas linhas
 char* removeTags(char s[]){
-    char *resp = (char *)malloc(sizeof(strlen(s)));
+    char *resp = (char *)malloc(sizeof(char) * strlen(s));
     int i = 0, j = 0;
     while(i < strlen(s)){
         if(s[i] == '<'){
@@ -58,7 +58,7 @@ char* removeTags(char s[]){
 //método para tratar o nome do arquivo lido e retorná-lo sem caracteres especiais
 char* getName(char fileName[]){
     char *teste;
-    char *resp = (char *)malloc(sizeof(strlen(fileName)));
+    char *resp = (char *)malloc(sizeof(char) * strlen(fileName));
     for(int i = 0; i < strlen(fileName); i++){
         if(fileName[i]  == '_'){
             resp[i] = ' ';
@@ -171,27 +171,14 @@ int comp = 0;
 void start(){
    n = 0;
 }
-/**
- * Insere um elemento na primeira posicao da lista e move os demais
- * elementos para o fim da 
- * @param x int elemento a ser inserido.
-*/
-void inserirInicio(Serie *x) {
-   int i;
-
-   //validar insercao
-   if(n >= MAXTAM){
-      printf("Erro ao inserir!");
-      exit(1);
-   } 
-
-   //levar elementos para o fim do array
-   for(i = n; i > 0; i--){
-      array[i] = array[i-1];
-   }
-
-   array[0] = x;
-   n++;
+void inserirFim(Serie *x) {
+    //validar insercao
+    if(n >= MAXTAM){
+        printf("Erro ao inserir!");
+        exit(1);
+    }
+    array[n] = x;
+    n++;
 }
 /**
  * Mostra os array separados por espacos.
@@ -210,8 +197,7 @@ void swap(Serie *i, Serie *j) {
    *j = temp;
 }
 
-void selecao(){
-    for (int i = 0; i < (n - 1); i++) {
+void selecao(int i){
         comp++;
         int menor = i;
         for (int j = (i + 1); j < n; j++){
@@ -227,6 +213,8 @@ void selecao(){
             }
         }
         swap(array[menor], array[i]);
+    if(i + 1 < n){
+        selecao(i + 1);
     }
 }
 
@@ -256,11 +244,13 @@ int main(){
     for(int i = 0; i < numEntrada; i++){
         serie[i] = (Serie*)malloc(sizeof(Serie));
         read(entrada[i], serie[i]);
-        inserirInicio(serie[i]);
+        inserirFim(serie[i]);
+        //printf("%s\n", serie->name);
     }
 
-    selecao();
+    selecao(0);
     mostrar();
+
 
     saveFile(clock() - t);
     return 0;
