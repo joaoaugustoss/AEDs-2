@@ -320,6 +320,7 @@ class CelulaDupla {
 class ListaDupla {
     private CelulaDupla primeiro;
 	private CelulaDupla ultimo;
+    public int comp = 0, mov = 0;
 
     /**
     * Construtor da classe.
@@ -335,27 +336,52 @@ class ListaDupla {
 		ultimo = ultimo.prox;
 	}
 
-    /*public void sort() {
-        quicksort(primeiro, ultimo);
+    public int tamanho(){
+        int tam = 0;
+        for(CelulaDupla i = primeiro.prox; i != null; i = i.prox){
+            tam += 1;
+        }
+        return tam;
+    }
+
+    public CelulaDupla getElemento(int pos) throws Exception{
+        CelulaDupla resp;
+        int tam = tamanho();
+
+        if(pos < 0 || pos >= tam)
+            throw new Exception("Posição inexistente");
+        CelulaDupla i = primeiro.prox;
+        for(int j = 0; j < pos; j++, i = i.prox);
+        resp = i;
+            
+        return resp;
+    }
+
+    public void sort() throws Exception{
+        quicksort(0, tamanho()-1);
     }
 
 	/**
 	 * Algoritmo de ordenacao Quicksort.
      * @param int esq inicio do serie a ser ordenado
      * @param int dir fim do serie a ser ordenado
-	 
-    private void quicksort(CelulaDupla esq, CelulaDupla dir) {
-        CelulaDupla i = primeiro, j = ultimo;
+	 */
+    private void quicksort(int esq, int dir) throws Exception{
+        int i = esq, j = dir;
         mov++;
-        Serie pivo = series[(dir+esq)/2];
+        CelulaDupla pivo = primeiro.prox;
+
+        for(int k = 0; k < ((dir+esq)/2) && pivo != null; pivo = pivo.prox, k++);
+
         while (i <= j) {
             comp += 3;
-            while (series[i].getCountry().compareTo(pivo.getCountry()) < 0 || (series[i].getCountry().compareTo(pivo.getCountry()) == 0 && (series[i].getName().compareTo(pivo.getName())) < 0)){ 
+            
+            while(getElemento(i).elemento.getCountry().compareTo(pivo.elemento.getCountry()) < 0 || (getElemento(i).elemento.getCountry().compareTo(pivo.elemento.getCountry()) == 0 && (getElemento(i).elemento.getName().compareTo(pivo.elemento.getName())) < 0)){ 
                 i++;
                 comp += 3;
             }
             comp += 3;
-            while (series[j].getCountry().compareTo(pivo.getCountry()) > 0 || (series[j].getCountry().compareTo(pivo.getCountry()) == 0 && series[j].getName().compareTo(pivo.getName()) > 0)){ 
+            while(getElemento(j).elemento.getCountry().compareTo(pivo.elemento.getCountry()) > 0 || (getElemento(j).elemento.getCountry().compareTo(pivo.elemento.getCountry()) == 0 && (getElemento(j).elemento.getName().compareTo(pivo.elemento.getName())) > 0)){ 
                 j--;
                 comp += 3;
             }
@@ -366,14 +392,14 @@ class ListaDupla {
                 j--;
             }
         }
-        if (esq < j)  quicksort(esq, j);
+        if (j > esq)  quicksort(esq, j);
         if (i < dir)  quicksort(i, dir);
-    }*/
+    }
 
-    public void swap(int i, int j) {
-        Serie temp = series[i];
-        series[i] = series[j];
-        series[j] = temp;
+    public void swap(int i, int j) throws Exception{
+        Serie temp = getElemento(i).elemento;
+        getElemento(i).elemento = getElemento(j).elemento;
+        getElemento(j).elemento = temp;
     }
 
     public void mostrar(){
@@ -405,7 +431,10 @@ class TP03Q14{
             lista.inserirFim(serie[i]);
         }
 
-        //lista.sort();
+        lista.sort();
+        lista.sort();
+        lista.sort();
+        lista.sort();
 
         lista.mostrar();
         long fim = now();
