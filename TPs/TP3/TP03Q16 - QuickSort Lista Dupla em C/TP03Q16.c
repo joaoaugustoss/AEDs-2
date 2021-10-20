@@ -294,9 +294,8 @@ int main(){
     quicksort();
     quicksort();
     quicksort();
-    quicksort();
+    
     mostrar();
-
 
     saveFile(clock() - t);
     return 0;
