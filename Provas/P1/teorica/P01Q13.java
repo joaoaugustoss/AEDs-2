@@ -99,11 +99,8 @@ class P01Q13{
         } else {
             System.out.println("Soma dos termos na posição " + elemento + ": " + (fila1.getElemento(elemento) + fila2.getElemento(elemento) + fila3.getElemento(elemento)));
             soma(fila1, fila2, fila3, elemento = elemento + 1);
-            
         }
     }
-
-
 
     public static void main(String[] args) throws Exception{
         Fila fila1 = new Fila();
