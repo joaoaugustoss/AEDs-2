@@ -251,7 +251,7 @@ class Serie{
             BufferedReader br = new BufferedReader(fileReader); //declaração do bufferedReader para leitura do arquivo
             
             //set nome da série
-            this.name = searchName(fileName);
+            this.name = searchName(fileName).trim();
             
             //set Formato da série
             while(!br.readLine().contains("Formato"));
@@ -293,142 +293,123 @@ class Serie{
             System.out.println("Error reading file '" + fileName + "'");
         }
     }
-}
+}     
 
-class Lista {
-    public static int comp = 0;
-    public static int mov = 0;
-    private static Serie[] series;
-    private static int n = 0;
+class No {
+    public Serie serie; // Conteudo do no.
+    public No esq, dir;  // Filhos da esq e dir.
 
     /**
-    * Construtor da classe.
-    */
-    public Lista () {
-        this(200);
+     * Construtor da classe.
+     * @param serie Conteudo do no.
+     */
+    public No(Serie serie) {
+        this(serie, null, null);
     }
 
     /**
-    * Construtor da classe.
-    * @param tamanho Tamanho da lista.
-    */
-    public Lista (int tamanho){
-        series = new Serie[tamanho];
+     * Construtor da classe.
+     * @param serie Conteudo do no.
+     * @param esq No da esquerda.
+     * @param dir No da direita.
+     */
+    public No(Serie serie, No esq, No dir) {
+        this.serie = serie;
+        this.esq = esq;
+        this.dir = dir;
+    }
+}
+
+class ArvoreBinaria {
+	private No raiz; // Raiz da arvore.
+    public int comp;
+    private int n;
+
+	public ArvoreBinaria() {
+		raiz = null;
+        comp = 0;
         n = 0;
+	}
+
+    public Serie[] sort(){
+        Serie[] array = new Serie[n];
+        n = 0;
+        sort(raiz, array);
+        return array;
     }
 
-    /**
-    * Insere um elemento na primeira posicao da lista e move os demais
-    * elementos para o fim da lista.
-    * @param x int elemento a ser inserido.
-    * @throws Exception Se a lista estiver cheia.
-    */
-    public void inserirInicio(Serie s) throws Exception {
-
-        //validar insercao
-        if(n >= series.length){
-            throw new Exception("Erro ao inserir!");
-        } 
-
-        //levar elementos para o fim do series
-        for(int i = n; i > 0; i--){
-            series[i] = series[i-1];
+    private void sort(No i, Serie[] array){
+        if(i != null){
+            comp++;
+            sort(i.esq, array);
+            array[n++] = i.serie;
+            sort(i.dir, array);
         }
+    }
 
-        series[0] = s;
+    public void inserir(Serie x){
         n++;
+        raiz = inserir(x, raiz);
     }
 
-    public void sort() {
-        quicksort(0, n-1);
-    }
-
-	/**
-	 * Algoritmo de ordenacao Quicksort.
-     * @param int esq inicio do serie a ser ordenado
-     * @param int dir fim do serie a ser ordenado
-	 */
-    private void quicksort(int esq, int dir) {
-        int i = esq, j = dir;
-        mov++;
-        Serie pivo = series[(dir+esq)/2];
-        while (i <= j) {
-            comp += 3;
-            while (series[i].getCountry().compareTo(pivo.getCountry()) < 0 || (series[i].getCountry().compareTo(pivo.getCountry()) == 0 && (series[i].getName().compareTo(pivo.getName())) < 0)){ 
-                i++;
-                comp += 3;
-            }
-            comp += 3;
-            while (series[j].getCountry().compareTo(pivo.getCountry()) > 0 || (series[j].getCountry().compareTo(pivo.getCountry()) == 0 && series[j].getName().compareTo(pivo.getName()) > 0)){ 
-                j--;
-                comp += 3;
-            }
-
-            if (i <= j) {
-                swap(i, j);
-                i++;
-                j--;
-            }
+    private No inserir(Serie x, No i){
+        if(i == null){
+            comp++;
+            i = new No(x);
+        } else if(x.getName().compareTo(i.serie.getName()) < 0){
+            comp++;
+            i.esq = inserir(x, i.esq);
+        } else if(x.getName().compareTo(i.serie.getName()) >= 0){
+            comp++;
+            i.dir = inserir(x, i.dir);
         }
-        if (esq < j)  quicksort(esq, j);
-        if (i < dir)  quicksort(i, dir);
-    }
-
-    public void swap(int i, int j) {
-        mov += 3;
-        Serie temp = series[i];
-        series[i] = series[j];
-        series[j] = temp;
-    }
-
-    public void mostrar(){
-        for(int i = 0; i < n; i++){
-            series[i].printClass();
-        }
+        return i;
     }
 }
 
-class TP03Q06{
-    static int count = 0;
+//classe main
+public class TP04Q05{
     public static void main(String[] args) throws Exception{
         long inicio = now();
         String[] entrada = new String[1000];
-        Lista lista = new Lista();
-        int numEntrada = 0;
+        String[] file = new String[10];
+        Serie[] passa = new Serie[30];
+        String[] pesquisa = new String[50];
+        ArvoreBinaria arvore = new ArvoreBinaria();
+        int numEntrada = 0, n = 0, pos = 0;
 
         do{
             entrada[numEntrada] = MyIO.readLine();
         }while(entrada[numEntrada++].equals("FIM") == false);
         numEntrada--;
-
-
+        
+        //vetor de séries
         Serie[] serie = new Serie[numEntrada];
-
         for(int i = 0; i < numEntrada; i++){
             serie[i] = new Serie();
             serie[i].readClass(entrada[i]);
-            lista.inserirInicio(serie[i]);
+            arvore.inserir(serie[i]);
+        }
+        Serie[] array = arvore.sort();
+        for(int i = 0; i < numEntrada; i++){
+            array[i].printClass();
         }
 
-        lista.sort();
-
-        lista.mostrar();
         long fim = now();
-        saveFile((fim - inicio)/1000.0, lista.comp, lista.mov);
+        saveFile((fim-inicio)/1000.0, arvore.comp);
     }
-
     //método para salvar o tempo de execução e o número de repetições no arquivo .txt
-    public static void saveFile(double time, int comp, int mov){
+    public static void saveFile(double time, int comp){
         try{
-            FileWriter fileWriter = new FileWriter("724667_quicksort.txt");
+            FileWriter fileWriter = new FileWriter("724667_treesort.txt");
             BufferedWriter bw = new BufferedWriter(fileWriter); 
-            bw.write(comp + "\t" + mov * 3 + "\t" + time + "s");
+            bw.write(comp + "\t" + time + "s");
             bw.close();
         //Tratamento de exceções
         } catch(FileNotFoundException e) {
-            System.out.println("Unable to open file '" + "724667_quicksort.txt" + "'");                
+            System.out.println("Unable to open file '" + "724667_treesort.txt" + "'");                
         } catch(IOException e) {
-            System.out.println("Error reading file '" + "724667_quicksort.txt" + "'");
+            System.out.println("Error reading file '" + "724667_treesort.txt" + "'");
         }
     }    
     //método para calcular o tempo de execução

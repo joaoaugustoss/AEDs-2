@@ -251,7 +251,7 @@ class Serie{
             BufferedReader br = new BufferedReader(fileReader); //declaração do bufferedReader para leitura do arquivo
             
             //set nome da série
-            this.name = searchName(fileName);
+            this.name = searchName(fileName).trim();
             
             //set Formato da série
             while(!br.readLine().contains("Formato"));
@@ -293,142 +293,319 @@ class Serie{
             System.out.println("Error reading file '" + fileName + "'");
         }
     }
+}     
+   
+class No {
+	public char serie; // Conteudo do no.
+	public No esq; // No da esquerda.
+	public No dir; // No da direita.
+    public No2 outro;
+	
+	No(char serie) {
+		this.serie = serie;
+		this.esq = this.dir = null;
+        this.outro = null;
+	}
+
+	No(char serie, No esq, No dir) {
+		this.serie = serie;
+		this.esq = esq;
+		this.dir = dir;
+        this.outro = null;
+	}
 }
 
-class Lista {
-    public static int comp = 0;
-    public static int mov = 0;
-    private static Serie[] series;
-    private static int n = 0;
+class No2 {
+    public Serie serie; // Conteudo do no.
+	public No2 esq; // No da esquerda.
+	public No2 dir; // No da direita.
+	
+	No2(String serie) {
+		this.serie = serie;
+		this.esq = this.dir = null;
+	}
 
-    /**
-    * Construtor da classe.
-    */
-    public Lista () {
-        this(200);
-    }
+	No2(Serie serie, No2 esq, No2 dir) {
+		this.serie = serie;
+		this.esq = esq;
+		this.dir = dir;
+	}
+}
 
-    /**
-    * Construtor da classe.
-    * @param tamanho Tamanho da lista.
-    */
-    public Lista (int tamanho){
-        series = new Serie[tamanho];
-        n = 0;
-    }
-
-    /**
-    * Insere um elemento na primeira posicao da lista e move os demais
-    * elementos para o fim da lista.
-    * @param x int elemento a ser inserido.
-    * @throws Exception Se a lista estiver cheia.
-    */
-    public void inserirInicio(Serie s) throws Exception {
-
-        //validar insercao
-        if(n >= series.length){
-            throw new Exception("Erro ao inserir!");
-        } 
-
-        //levar elementos para o fim do series
-        for(int i = n; i > 0; i--){
-            series[i] = series[i-1];
-        }
-
-        series[0] = s;
-        n++;
-    }
-
-    public void sort() {
-        quicksort(0, n-1);
-    }
+/**
+ * Arvore de arvore
+ * @author Max do Val Machado
+ */
+public class ArvoreArvore {
+	private No raiz; // Raiz da arvore.
+    public int comp;
 
 	/**
-	 * Algoritmo de ordenacao Quicksort.
-     * @param int esq inicio do serie a ser ordenado
-     * @param int dir fim do serie a ser ordenado
+	 * Construtor da classe.
 	 */
-    private void quicksort(int esq, int dir) {
-        int i = esq, j = dir;
-        mov++;
-        Serie pivo = series[(dir+esq)/2];
-        while (i <= j) {
-            comp += 3;
-            while (series[i].getCountry().compareTo(pivo.getCountry()) < 0 || (series[i].getCountry().compareTo(pivo.getCountry()) == 0 && (series[i].getName().compareTo(pivo.getName())) < 0)){ 
-                i++;
-                comp += 3;
-            }
-            comp += 3;
-            while (series[j].getCountry().compareTo(pivo.getCountry()) > 0 || (series[j].getCountry().compareTo(pivo.getCountry()) == 0 && series[j].getName().compareTo(pivo.getName()) > 0)){ 
-                j--;
-                comp += 3;
-            }
+	public ArvoreArvore() {
+		raiz = null;
+        comp = 0;
+        inserir('D');
+        inserir('R');
+        inserir('Z');
+        inserir('X');
+        inserir('V');
+        inserir('B');
+        inserir('F');
+        inserir('P');
+        inserir('U');
+        inserir('I');
+        inserir('G');
+        inserir('E');
+        inserir('J');
+        inserir('L');
+        inserir('H');
+        inserir('T');
+        inserir('A');
+        inserir('W');
+        inserir('S');
+        inserir('O');
+        inserir('M');
+        inserir('N');
+        inserir('K');
+        inserir('C');
+        inserir('Y');
+        inserir('Q');       
+	}
 
-            if (i <= j) {
-                swap(i, j);
-                i++;
-                j--;
-            }
+   public No inserir(char x, ){
+        //igualzinho (mesmo, de verdade) ao da árvore binária padrão!!!
+        if (i == null) {
+            i = new No(x);
+        } else if (x < i.elemento) {
+            i.esq = inserir(x, i.esq);
+        } else if (x > i.elemento) {
+            i.dir = inserir(x, i.dir);
+        } else {
+            throw new Exception("Erro ao inserir!");
         }
-        if (esq < j)  quicksort(esq, j);
-        if (i < dir)  quicksort(i, dir);
-    }
+   }
 
-    public void swap(int i, int j) {
-        mov += 3;
-        Serie temp = series[i];
-        series[i] = series[j];
-        series[j] = temp;
-    }
 
-    public void mostrar(){
-        for(int i = 0; i < n; i++){
-            series[i].printClass();
+   public void inserir(String s){
+      inserir(s, raiz);
+   }
+
+   public void inserir(String s, No i) throws Exception {
+		if (i == null) {
+         throw new Exception("Erro ao inserir: caractere invalido!");
+
+      } else if (s.charAt(0) < i.elemento) {
+         inserir(x, i.esq);
+
+      } else if (s.charAt(0) > i.elemento) {
+         inserir(x, i.dir);
+
+      } else {
+         i.outro = inserir(s, i.outro);
+      }
+   }
+
+
+	private No2 inserir(String s, No2 i) throws Exception {
+		if (i == null) {
+         i = new No2(x);
+
+      } else if (s.compareTo(i.elemento) < 0) {
+         i.esq = inserir(x, i.esq);
+
+      } else if (s.compareTo(i.elemento) > 0) {
+         i.dir = inserir(x, i.dir);
+
+      } else {
+         throw new Exception("Erro ao inserir: elemento existente!");
+      }
+
+		return i;
+	}
+
+
+   public void mostrar(){
+      mostrar(raiz);
+   }
+
+   public void mostrar(No i){
+      if (i != null){
+         mostrar(i.esq);
+         //System.out.println("Letra: " + i.elemento);
+         mostrar(i.outra);
+         mostrar(i.dir);
+      }
+   }
+
+   public void mostrar(No2 i){
+      if (i != null){
+         mostrar(i.esq);
+         System.out.println(i.elemento);
+         mostrar(i.dir);
+      }
+   }
+
+
+
+   public boolean hasStringTam10(){
+      return hasStringTam10(raiz);
+   }
+
+   public boolean hasStringTam10(No i){
+      boolean resp = false;
+      if(i != null){
+         resp = hasStringTam10(i.outro) || hasStringTam10(i.esq) || hasStringTam10(i.dir);
+      }
+      return resp;
+   }
+
+   public boolean hasStringTam10(No2 i){
+      boolean resp = false;
+      if(i != null){
+         resp = i.elemento.length() == 10 || hasStringTam10(i.esq) || hasStringTam10(i.dir);
+      }
+      return resp;
+   }
+
+
+   public boolean hasStringTam10(char c){
+      return hasStringTam10(raiz, c);
+   }
+
+   public boolean hasStringTam10(No i, char c){
+      boolean resp;
+		if (i == null) {
+         resp = false;
+
+      } else if (c < i.elemento) {
+         resp = hasStringTam10(i.esq, c);
+
+      } else if (c > i.elemento) {
+         resp = hasStringTam10(i.dir, c);
+
+      } else {
+         resp = hasStringTam10(i.outro);
+      }
+      return resp;
+   }
+
+	/**
+	 * Metodo publico iterativo para pesquisar elemento.
+	 * @param elemento Elemento que sera procurado.
+	 * @return <code>true</code> se o elemento existir,
+	 * <code>false</code> em caso contrario.
+	 */
+	public boolean pesquisar(String elemento) {
+		return pesquisar(raiz, elemento);
+	}
+
+	private boolean pesquisar(No no, String x) {
+      boolean resp;
+		if (no == null) {
+         resp = false;
+
+      } else if (x.charAt(0) < no.elemento) {
+         resp = pesquisar(no.esq, x);
+
+      } else if (x.charAt(0) > no.elemento) {
+         resp = pesquisar(no.dir, x);
+
+      } else {
+         resp = pesquisarSegundaArvore(no.outro, x);
+      }
+      return resp;
+	}
+
+	private boolean pesquisarSegundaArvore(No2 no, String x) {
+      boolean resp;
+		if (no == null) {
+         resp = false;
+
+      } else if (x.compareTo(no.elemento) < 0) {
+         resp = pesquisarSegundaArvore(no.esq, x);
+
+      } else if (x.compareTo(no.elemento) > 0) {
+         resp = pesquisarSegundaArvore(no.dir, x);
+
+      } else {
+         resp = true;
+      }
+      return resp;
+	}
+
+
+   public int contPalavra(char letra){
+      return contPalavra(letra, raiz);
+   }
+
+   public int contPalavra(char letra, No i) throws Exception {
+      int resp = 0;
+        if (i == null) {
+            throw new Exception("Erro ao pesquisar: caractere invalido!");
+        } else if (letra < i.elemento) {
+            resp = contPalavra(letra, i.esq);
+        } else if (letra > i.elemento) {
+            resp = contPalavra(letra, i.dir);
+        } else {
+            resp = contPalavra(i.outro);
         }
+        return resp;
     }
+
+   public int contPalavra(No2 i){
+      int resp = 0;
+      if(i != null){
+         resp = 1 + contPalavra(i.esq) + contPalavra(i.dir);
+      }
+      return resp;
+   }
 }
 
-class TP03Q06{
-    static int count = 0;
+//classe main
+public class TP04Q05{
     public static void main(String[] args) throws Exception{
         long inicio = now();
         String[] entrada = new String[1000];
-        Lista lista = new Lista();
-        int numEntrada = 0;
+        String[] file = new String[10];
+        Serie[] passa = new Serie[30];
+        String[] pesquisa = new String[50];
+        ArvoreBinaria arvore = new ArvoreBinaria();
+        int numEntrada = 0, n = 0, pos = 0;
 
         do{
             entrada[numEntrada] = MyIO.readLine();
         }while(entrada[numEntrada++].equals("FIM") == false);
         numEntrada--;
-
-
+        
+        //vetor de séries
         Serie[] serie = new Serie[numEntrada];
-
         for(int i = 0; i < numEntrada; i++){
             serie[i] = new Serie();
             serie[i].readClass(entrada[i]);
-            lista.inserirInicio(serie[i]);
+            arvore.inserir(serie[i]);
+        }
+        Serie[] array = arvore.sort();
+        for(int i = 0; i < numEntrada; i++){
+            array[i].printClass();
         }
 
-        lista.sort();
-
-        lista.mostrar();
         long fim = now();
-        saveFile((fim - inicio)/1000.0, lista.comp, lista.mov);
+        saveFile((fim-inicio)/1000.0, arvore.comp);
     }
-
     //método para salvar o tempo de execução e o número de repetições no arquivo .txt
-    public static void saveFile(double time, int comp, int mov){
+    public static void saveFile(double time, int comp){
         try{
-            FileWriter fileWriter = new FileWriter("724667_quicksort.txt");
+            FileWriter fileWriter = new FileWriter("724667_arvoreArvore.txt");
             BufferedWriter bw = new BufferedWriter(fileWriter); 
-            bw.write(comp + "\t" + mov * 3 + "\t" + time + "s");
+            bw.write(comp + "\t" + time + "s");
             bw.close();
         //Tratamento de exceções
         } catch(FileNotFoundException e) {
-            System.out.println("Unable to open file '" + "724667_quicksort.txt" + "'");                
+            System.out.println("Unable to open file '" + "724667_arvoreArvore.txt" + "'");                
         } catch(IOException e) {
-            System.out.println("Error reading file '" + "724667_quicksort.txt" + "'");
+            System.out.println("Error reading file '" + "724667_arvoreArvore.txt" + "'");
         }
     }    
     //método para calcular o tempo de execução
