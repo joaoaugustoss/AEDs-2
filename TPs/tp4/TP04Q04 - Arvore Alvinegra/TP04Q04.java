@@ -295,181 +295,236 @@ class Serie{
     }
 }     
 
-class No {
-    public Serie serie; // Conteudo do no.
-    public No esq, dir;  // Filhos da esq e dir.
-
-    /**
-     * Construtor da classe.
-     * @param serie Conteudo do no.
-     */
-    public No(Serie serie) {
-        this(serie, null, null);
+class NoAN{
+    public boolean cor;
+    public Serie elemento;
+    public NoAN esq, dir;
+    public NoAN (){
+        this(null);
     }
-
-    /**
-     * Construtor da classe.
-     * @param serie Conteudo do no.
-     * @param esq No da esquerda.
-     * @param dir No da direita.
-     */
-    public No(Serie serie, No esq, No dir) {
-        this.serie = serie;
+    public NoAN (Serie elemento){
+        this(elemento, false, null, null);
+    }
+    public NoAN (Serie elemento, boolean cor){
+        this(elemento, cor, null, null);
+    }
+    public NoAN (Serie elemento, boolean cor, NoAN esq, NoAN dir){
+        this.cor = cor;
+        this.elemento = elemento;
         this.esq = esq;
         this.dir = dir;
     }
 }
 
-class ArvoreBinaria {
-	private No raiz; // Raiz da arvore.
-    public int comp;
+class Alvinegra {
+        private NoAN raiz; // Raiz da arvore.
+        public int comp;
 
-	public ArvoreBinaria() {
-		raiz = null;
-        comp = 0;
-	}
-
-	public boolean pesquisar(String x) {
-        System.out.print(" raiz");
-		return pesquisar(x, raiz);
-	}
-
-	private boolean pesquisar(String x, No i) {
-        boolean resp;
-	    if (i == null) {
-            System.out.println(" NAO");
-            comp++;
-            resp = false;
-        } else if (x.compareTo(i.serie.getName()) == 0) {
-            System.out.println(" SIM");
-            comp++;
-            resp = true;
-        } else if (x.compareTo(i.serie.getName()) < 0) {
-            System.out.print(" esq");
-            comp++;
-            resp = pesquisar(x, i.esq);
-        } else {
-            System.out.print(" dir");
-            comp++;
-            resp = pesquisar(x, i.dir);
-            //System.out.println(x + "\t" + i.serie.getName());
+        public Alvinegra() {
+            raiz = null;
+            comp = 0;
         }
-        return resp;
-	}
 
-	public void inserir(Serie x) throws Exception {
-		raiz = inserir(x, raiz);
-	}
-
-	private No inserir(Serie x, No i) throws Exception {
-		if (i == null) {
-            i = new No(x);
-            comp++;
-        } else if (x.getName().compareTo(i.serie.getName()) < 0) {
-            comp++;
-            i.esq = inserir(x, i.esq);
-        } else if (x.getName().compareTo(i.serie.getName()) > 0) {
-            comp++;
-            i.dir = inserir(x, i.dir);
-        } else {
-            comp++;
-            throw new Exception("Erro ao inserir!");
+        public boolean pesquisar(String elemento) {
+            System.out.print("raiz");
+            return pesquisar(elemento, raiz);
         }
-		return i;
+
+        private boolean pesquisar(String elemento, NoAN i) {
+            boolean resp;
+            if (i == null) {
+                System.out.println(" NAO");
+                resp = false;
+            } else if (elemento.compareTo(i.elemento.getName()) == 0) {
+                System.out.println(" SIM");
+                resp = true;
+            } else if (elemento.compareTo(i.elemento.getName()) < 0) {
+                System.out.print(" esq");
+                resp = pesquisar(elemento, i.esq);
+            } else {
+                System.out.print(" dir");
+                resp = pesquisar(elemento, i.dir);
+            }
+            return resp;
+        }
+
+        public void caminharCentral() {
+            System.out.print("[ ");
+            caminharCentral(raiz);
+            System.out.println("]");
+        }
+
+        private void caminharCentral(NoAN i) {
+            if (i != null) {
+                caminharCentral(i.esq); // Elementos da esquerda.
+                System.out.print(i.elemento.getName() + ((i.cor) ? "(p) " : "(b) ")); // Conteudo do no.
+                caminharCentral(i.dir); // Elementos da direita.
+            }
+        }
+
+        public void inserir(Serie elemento) throws Exception {
+            //Se a arvore estiver vazia
+            if(raiz == null){
+                raiz = new NoAN(elemento);
+
+            //Senao, se a arvore tiver um elemento 
+            } else if (raiz.esq == null && raiz.dir == null){
+                if (elemento.getName().compareTo(raiz.elemento.getName()) < 0){
+                    raiz.esq = new NoAN(elemento);
+                } else {
+                    raiz.dir = new NoAN(elemento);
+                }
+
+            //Senao, se a arvore tiver dois elementos (raiz e dir)
+            } else if (raiz.esq == null){
+
+                if(elemento.getName().compareTo(raiz.elemento.getName()) < 0){
+                    raiz.esq = new NoAN(elemento);
+
+                } else if (elemento.getName().compareTo(raiz.dir.elemento.getName()) < 0){
+                    raiz.esq = new NoAN(raiz.elemento);
+                    raiz.elemento = elemento;
+
+                } else {
+                    raiz.esq = new NoAN(raiz.elemento);
+                    raiz.elemento = raiz.dir.elemento;
+                    raiz.dir.elemento = elemento;
+                }
+
+                raiz.esq.cor = raiz.dir.cor = false;
+                
+            //Senao, se a arvore tiver dois elementos (raiz e esq)
+            } else if (raiz.dir == null){
+                
+                if(elemento.getName().compareTo(raiz.elemento.getName()) > 0){
+                    raiz.dir = new NoAN(elemento);
+                } else if (elemento.getName().compareTo(raiz.esq.elemento.getName()) > 0){
+                    raiz.dir = new NoAN(raiz.elemento);
+                    raiz.elemento = elemento;
+                } else {
+                    raiz.dir = new NoAN(raiz.elemento);
+                    raiz.elemento = raiz.esq.elemento;
+                    raiz.esq.elemento = elemento;
+                }
+
+                raiz.esq.cor = raiz.dir.cor = false;
+
+            //Senao, a arvore tem tres ou mais elementos
+            } else {
+                inserir(elemento, null, null, null, raiz);
+            }
+
+            raiz.cor = false;
+        }
+
+        private void balancear(NoAN bisavo, NoAN avo, NoAN pai, NoAN i){
+
+            //Se o pai tambem e preto, reequilibrar a arvore, rotacionando o avo
+            if(pai.cor == true){
+
+                //4 tipos de reequilibrios e acoplamento
+                if(pai.elemento.getName().compareTo(avo.elemento.getName()) > 0){ // rotacao a esquerda ou direita-esquerda
+                    if(i.elemento.getName().compareTo(pai.elemento.getName()) > 0){
+                        avo = rotacaoEsq(avo);
+                    } else {
+                        avo = rotacaoDirEsq(avo);
+                    }
+
+                } else { // rotacao a direita ou esquerda-direita
+                    if(i.elemento.getName().compareTo(pai.elemento.getName()) < 0){
+                        avo = rotacaoDir(avo);
+                    } else {
+                        avo = rotacaoEsqDir(avo);
+                    }
+                }
+
+                if (bisavo == null){
+                    raiz = avo;
+                } else if(avo.elemento.getName().compareTo(bisavo.elemento.getName()) < 0){
+                    bisavo.esq = avo;
+                } else {
+                    bisavo.dir = avo;
+                }
+
+                //reestabelecer as cores apos a rotacao
+                avo.cor = false;
+                avo.esq.cor = avo.dir.cor = true;
+            } //if(pai.cor == true)
+        }
+
+    private void inserir(Serie elemento, NoAN bisavo, NoAN avo, NoAN pai, NoAN i) throws Exception {
+        if (i == null) {
+            if(elemento.getName().compareTo(pai.elemento.getName()) < 0){
+                i = pai.esq = new NoAN(elemento, true);
+            } else {
+                i = pai.dir = new NoAN(elemento, true);
+            }
+
+            if(pai.cor == true){
+                balancear(bisavo, avo, pai, i);
+            }
+
+        } else {
+
+            //Achou um 4-no: eh preciso fragmeta-lo e reequilibrar a arvore
+            if(i.esq != null && i.dir != null && i.esq.cor == true && i.dir.cor == true){
+                i.cor = true;
+                i.esq.cor = i.dir.cor = false;
+                if(i == raiz){
+                    i.cor = false;
+                }else if(pai.cor == true){
+                    balancear(bisavo, avo, pai, i);
+                }
+            }
+
+            if (elemento.getName().compareTo(i.elemento.getName()) < 0) {
+                inserir(elemento, avo, pai, i, i.esq);
+            } else if (elemento.getName().compareTo(i.elemento.getName()) > 0) {
+                inserir(elemento, avo, pai, i, i.dir);
+            } else {
+                throw new Exception("Erro inserir (elemento repetido)!");
+            }
+        }
     }
 
-	public void remover(String x) throws Exception {
-        if(xama(x))
-		    raiz = remover(x, raiz);
-	}
+    private NoAN rotacaoDir(NoAN no) {
+        NoAN noEsq = no.esq;
+        NoAN noEsqDir = noEsq.dir;
 
-	private No remover(String x, No i) throws Exception {
-        if (i == null) {
-            comp++;
-            throw new Exception("Erro ao remover!");
-         } else if (x.compareTo(i.serie.getName()) < 0) {
-            comp++;
-            i.esq = remover(x, i.esq);
-         } else if (x.compareTo(i.serie.getName()) > 0) {
-            comp++;
-            i.dir = remover(x, i.dir);
-         // Sem no a direita.
-         } else if (i.dir == null) {
-            comp++;
-            i = i.esq;
-         // Sem no a esquerda.
-         } else if (i.esq == null) {
-            comp++;
-            i = i.dir;
-         // No a esquerda e no a direita.
-         } else {
-            comp++;
-            i.esq = maiorEsq(i, i.esq);
-	     }
-		return i;
-	}
-	
-    public boolean xama(String x) {
-		return xama(x, raiz);
-	}
+        noEsq.dir = no;
+        no.esq = noEsqDir;
 
-	private boolean xama(String x, No i) {
-        boolean resp;
-	    if (i == null) {
-            comp++;
-            resp = false;
-        } else if (x.compareTo(i.serie.getName()) == 0) {
-            comp++;
-            resp = true;
-        } else if (x.compareTo(i.serie.getName()) < 0) {
-            comp++;
-            resp = xama(x, i.esq);
-        } else {
-            comp++;
-            resp = xama(x, i.dir);
-        }
-        return resp;
-	}
+        return noEsq;
+    }
 
-	private No maiorEsq(No i, No j) {
-      // Encontrou o maximo da subarvore esquerda.
-		if (j.dir == null) {
-            comp++;
-			i.serie = j.serie; // Substitui i por j.
-			j = j.esq; // Substitui j por j.ESQ.
-      // Existe no a direita.
-		} else {
-         // Caminha para direita.
-            comp++;
-			j.dir = maiorEsq(i, j.dir);
-		}
-		return j;
-	}
-    public void caminharCentral() {
-		System.out.print("[ ");
-		caminharCentral(raiz);
-		System.out.println("]");
-	}
+    private NoAN rotacaoEsq(NoAN no) {
+        NoAN noDir = no.dir;
+        NoAN noDirEsq = noDir.esq;
 
-	private void caminharCentral(No i) {
-		if (i != null) {
-			caminharCentral(i.esq); // Elementos da esquerda.
-			System.out.print(i.serie.getName() + " "); // Conteudo do no.
-			caminharCentral(i.dir); // Elementos da direita.
-		}
-	}
+        noDir.esq = no;
+        no.dir = noDirEsq;
+        return noDir;
+    }
+
+    private NoAN rotacaoDirEsq(NoAN no) {
+        no.dir = rotacaoDir(no.dir);
+        return rotacaoEsq(no);
+    }
+
+    private NoAN rotacaoEsqDir(NoAN no) {
+        no.esq = rotacaoEsq(no.esq);
+        return rotacaoDir(no);
+    }
 }
 
 //classe main
-public class TP04Q01{
+public class TP04Q04{
     public static void main(String[] args) throws Exception{
         long inicio = now();
         String[] entrada = new String[1000];
-        String[] file = new String[10];
-        Serie[] passa = new Serie[30];
         String[] pesquisa = new String[50];
-        ArvoreBinaria arvore = new ArvoreBinaria();
-        int numEntrada = 0, n = 0, pos = 0;
+        Alvinegra arvore = new Alvinegra();
+        int numEntrada = 0;
 
         do{
             entrada[numEntrada] = MyIO.readLine();
@@ -483,24 +538,7 @@ public class TP04Q01{
             serie[i].readClass(entrada[i]);
             arvore.inserir(serie[i]);
         }
-        n = MyIO.readInt();
-        String doido;
-
-        //leitura das inserções e remoções na árvore
-        for(int i = 0; i < n; i++){
-            doido = MyIO.readLine();
-            passa[i] = new Serie();
-            if(doido.contains("I")){
-                file = doido.split(" ");
-                passa[i].readClass(file[1]);
-                arvore.inserir(passa[i]);
-            } else if(doido.contains("R")){
-                file = doido.split("R");
-                arvore.remover(file[1].trim());
-            }
-        }
         numEntrada = 0;
-        //arvore.caminharCentral();
         //leitura das séries a serem pesquisadas
         do{
             pesquisa[numEntrada] = MyIO.readLine();
@@ -515,15 +553,15 @@ public class TP04Q01{
     //método para salvar o tempo de execução e o número de repetições no arquivo .txt
     public static void saveFile(double time, int comp){
         try{
-            FileWriter fileWriter = new FileWriter("724667_arvoreBinaria.txt");
+            FileWriter fileWriter = new FileWriter("724667_alvinegra.txt");
             BufferedWriter bw = new BufferedWriter(fileWriter); 
             bw.write(comp + "\t" + time + "s");
             bw.close();
         //Tratamento de exceções
         } catch(FileNotFoundException e) {
-            System.out.println("Unable to open file '" + "724667_arvoreBinaria.txt" + "'");                
+            System.out.println("Unable to open file '" + "724667_alvinegra.txt" + "'");                
         } catch(IOException e) {
-            System.out.println("Error reading file '" + "724667_arvoreBinaria.txt" + "'");
+            System.out.println("Error reading file '" + "724667_alvinegra.txt" + "'");
         }
     }    
     //método para calcular o tempo de execução

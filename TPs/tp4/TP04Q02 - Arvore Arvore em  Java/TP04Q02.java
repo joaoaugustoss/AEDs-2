@@ -320,7 +320,7 @@ class No2 {
 	public No2 esq; // No da esquerda.
 	public No2 dir; // No da direita.
 	
-	No2(String serie) {
+	No2(Serie serie) {
 		this.serie = serie;
 		this.esq = this.dir = null;
 	}
@@ -336,14 +336,14 @@ class No2 {
  * Arvore de arvore
  * @author Max do Val Machado
  */
-public class ArvoreArvore {
+class ArvoreArvore {
 	private No raiz; // Raiz da arvore.
     public int comp;
 
 	/**
 	 * Construtor da classe.
 	 */
-	public ArvoreArvore() {
+	public ArvoreArvore() throws Exception{
 		raiz = null;
         comp = 0;
         inserir('D');
@@ -374,57 +374,66 @@ public class ArvoreArvore {
         inserir('Q');       
 	}
 
-   public No inserir(char x, ){
-        //igualzinho (mesmo, de verdade) ao da árvore binária padrão!!!
+   public void inserir(char s) throws Exception{
+      raiz = inserir(s, raiz);
+   }
+
+   private No inserir(char s, No i) throws Exception {
         if (i == null) {
-            i = new No(x);
-        } else if (x < i.elemento) {
-            i.esq = inserir(x, i.esq);
-        } else if (x > i.elemento) {
-            i.dir = inserir(x, i.dir);
+            comp++;
+            i = new No(s);
+        } else if (s < i.serie) {
+            comp++;
+            i.esq = inserir(s, i.esq);
+        } else if (s > i.serie) {
+            comp++;
+            i.dir = inserir(s, i.dir);
         } else {
+            comp++;
             throw new Exception("Erro ao inserir!");
         }
-   }
+        return i;
+    }
 
+    public void inserir(Serie x) throws Exception {
+        inserir(x, raiz);
+    }
 
-   public void inserir(String s){
-      inserir(s, raiz);
-   }
+    public void inserir(Serie x, No i) throws Exception {
+        if (i == null) {
+            comp++;
+            throw new Exception("Erro ao inserir: caractere invalido!");
+        } else if (x.getName().charAt(0) < i.serie) {
+            comp++;
+            inserir(x, i.esq);
+        } else if (x.getName().charAt(0) > i.serie) {
+            comp++;
+            inserir(x, i.dir);
+        } else {
+            comp++;
+            i.outro = inserir(x, i.outro);
+        }
+    }
 
-   public void inserir(String s, No i) throws Exception {
-		if (i == null) {
-         throw new Exception("Erro ao inserir: caractere invalido!");
+    private No2 inserir(Serie x, No2 i) throws Exception {
+        if (i == null) {
+            comp++;
+            i = new No2(x);
 
-      } else if (s.charAt(0) < i.elemento) {
-         inserir(x, i.esq);
+        } else if (x.getName().compareTo(i.serie.getName()) < 0) {
+            comp++;
+            i.esq = inserir(x, i.esq);
 
-      } else if (s.charAt(0) > i.elemento) {
-         inserir(x, i.dir);
+        } else if (x.getName().compareTo(i.serie.getName()) > 0) {
+            comp++;
+            i.dir = inserir(x, i.dir);
 
-      } else {
-         i.outro = inserir(s, i.outro);
-      }
-   }
-
-
-	private No2 inserir(String s, No2 i) throws Exception {
-		if (i == null) {
-         i = new No2(x);
-
-      } else if (s.compareTo(i.elemento) < 0) {
-         i.esq = inserir(x, i.esq);
-
-      } else if (s.compareTo(i.elemento) > 0) {
-         i.dir = inserir(x, i.dir);
-
-      } else {
-         throw new Exception("Erro ao inserir: elemento existente!");
-      }
-
-		return i;
-	}
-
+        } else {
+            comp++;
+            throw new Exception("Erro ao inserir: elemento existente!");
+        }
+        return i;
+    }
 
    public void mostrar(){
       mostrar(raiz);
@@ -432,146 +441,79 @@ public class ArvoreArvore {
 
    public void mostrar(No i){
       if (i != null){
+         comp++;
          mostrar(i.esq);
-         //System.out.println("Letra: " + i.elemento);
-         mostrar(i.outra);
+         System.out.println("Letra: " + i.serie);
+         mostrar(i.outro);
          mostrar(i.dir);
       }
    }
 
    public void mostrar(No2 i){
       if (i != null){
+         comp++;
          mostrar(i.esq);
-         System.out.println(i.elemento);
+         System.out.println(i.serie.getName());
          mostrar(i.dir);
       }
    }
 
-
-
-   public boolean hasStringTam10(){
-      return hasStringTam10(raiz);
-   }
-
-   public boolean hasStringTam10(No i){
-      boolean resp = false;
-      if(i != null){
-         resp = hasStringTam10(i.outro) || hasStringTam10(i.esq) || hasStringTam10(i.dir);
-      }
-      return resp;
-   }
-
-   public boolean hasStringTam10(No2 i){
-      boolean resp = false;
-      if(i != null){
-         resp = i.elemento.length() == 10 || hasStringTam10(i.esq) || hasStringTam10(i.dir);
-      }
-      return resp;
-   }
-
-
-   public boolean hasStringTam10(char c){
-      return hasStringTam10(raiz, c);
-   }
-
-   public boolean hasStringTam10(No i, char c){
-      boolean resp;
-		if (i == null) {
-         resp = false;
-
-      } else if (c < i.elemento) {
-         resp = hasStringTam10(i.esq, c);
-
-      } else if (c > i.elemento) {
-         resp = hasStringTam10(i.dir, c);
-
-      } else {
-         resp = hasStringTam10(i.outro);
-      }
-      return resp;
-   }
-
-	/**
-	 * Metodo publico iterativo para pesquisar elemento.
-	 * @param elemento Elemento que sera procurado.
-	 * @return <code>true</code> se o elemento existir,
-	 * <code>false</code> em caso contrario.
-	 */
 	public boolean pesquisar(String elemento) {
+        System.out.print("raiz ");
 		return pesquisar(raiz, elemento);
 	}
 
 	private boolean pesquisar(No no, String x) {
       boolean resp;
 		if (no == null) {
-         resp = false;
-
-      } else if (x.charAt(0) < no.elemento) {
-         resp = pesquisar(no.esq, x);
-
-      } else if (x.charAt(0) > no.elemento) {
-         resp = pesquisar(no.dir, x);
-
-      } else {
-         resp = pesquisarSegundaArvore(no.outro, x);
-      }
-      return resp;
-	}
-
-	private boolean pesquisarSegundaArvore(No2 no, String x) {
-      boolean resp;
-		if (no == null) {
-         resp = false;
-
-      } else if (x.compareTo(no.elemento) < 0) {
-         resp = pesquisarSegundaArvore(no.esq, x);
-
-      } else if (x.compareTo(no.elemento) > 0) {
-         resp = pesquisarSegundaArvore(no.dir, x);
-
-      } else {
-         resp = true;
-      }
-      return resp;
-	}
-
-
-   public int contPalavra(char letra){
-      return contPalavra(letra, raiz);
-   }
-
-   public int contPalavra(char letra, No i) throws Exception {
-      int resp = 0;
-        if (i == null) {
-            throw new Exception("Erro ao pesquisar: caractere invalido!");
-        } else if (letra < i.elemento) {
-            resp = contPalavra(letra, i.esq);
-        } else if (letra > i.elemento) {
-            resp = contPalavra(letra, i.dir);
+            comp++;
+            resp = false;
+        } else if (pesquisarSegundaArvore(no.outro, x)) {
+            comp++;
+            resp = true;
         } else {
-            resp = contPalavra(i.outro);
+            comp++;
+            System.out.print("esq ");
+            resp = pesquisar(no.esq, x);
+            if(!resp){
+                comp++;
+                System.out.print("dir ");
+                resp = pesquisar(no.dir, x);
+            }
         }
         return resp;
-    }
+	}
 
-   public int contPalavra(No2 i){
-      int resp = 0;
-      if(i != null){
-         resp = 1 + contPalavra(i.esq) + contPalavra(i.dir);
-      }
-      return resp;
-   }
+    private boolean pesquisarSegundaArvore(No2 no, String x) {
+        boolean resp;
+		if (no == null) {
+            comp++;
+            resp = false;
+        } else if (x.compareTo(no.serie.getName()) == 0) {
+            comp++;
+            resp = true;
+        } else {
+            comp++;
+            System.out.print("ESQ ");
+            resp = pesquisarSegundaArvore(no.esq, x);
+            if(!resp){
+                comp++;
+                System.out.print("DIR ");
+                resp = pesquisarSegundaArvore(no.dir, x);
+            }
+        }
+        return resp;
+	}
+
 }
 
 //classe main
-public class TP04Q05{
+public class TP04Q02{
     public static void main(String[] args) throws Exception{
         long inicio = now();
         String[] entrada = new String[1000];
-        String[] file = new String[10];
-        Serie[] passa = new Serie[30];
         String[] pesquisa = new String[50];
-        ArvoreBinaria arvore = new ArvoreBinaria();
+        ArvoreArvore arvore = new ArvoreArvore();
         int numEntrada = 0, n = 0, pos = 0;
 
         do{
@@ -586,11 +528,20 @@ public class TP04Q05{
             serie[i].readClass(entrada[i]);
             arvore.inserir(serie[i]);
         }
-        Serie[] array = arvore.sort();
+        numEntrada = 0;
+        do{
+            pesquisa[numEntrada] = MyIO.readLine();
+        }while(pesquisa[numEntrada++].equals("FIM") == false);
+        numEntrada--;
+
         for(int i = 0; i < numEntrada; i++){
-            array[i].printClass();
+            if(arvore.pesquisar(pesquisa[i]))
+                System.out.println(" SIM");
+            else
+                System.out.println(" NAO");
         }
 
+        //arvore.mostrar();
         long fim = now();
         saveFile((fim-inicio)/1000.0, arvore.comp);
     }

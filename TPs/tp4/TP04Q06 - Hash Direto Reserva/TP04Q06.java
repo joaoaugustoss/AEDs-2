@@ -293,183 +293,85 @@ class Serie{
             System.out.println("Error reading file '" + fileName + "'");
         }
     }
-}     
+} 
 
-class No {
-    public Serie serie; // Conteudo do no.
-    public No esq, dir;  // Filhos da esq e dir.
+class Hash {
+    Serie tabela[];
+    int m;
+    int NULO = -1;
 
-    /**
-     * Construtor da classe.
-     * @param serie Conteudo do no.
-     */
-    public No(Serie serie) {
-        this(serie, null, null);
+    public Hash (){
+        this(3);
     }
 
-    /**
-     * Construtor da classe.
-     * @param serie Conteudo do no.
-     * @param esq No da esquerda.
-     * @param dir No da direita.
-     */
-    public No(Serie serie, No esq, No dir) {
-        this.serie = serie;
-        this.esq = esq;
-        this.dir = dir;
+    public Hash (int m){
+        this.m = m;
+        this.tabela = new int [this.m];
+        for(int i = 0; i < m; i++){
+            tabela[i] = NULO;
+        }
     }
-}
 
-class ArvoreBinaria {
-	private No raiz; // Raiz da arvore.
-    public int comp;
+    public int h(int elemento){
+        return elemento % 21;
+    }
 
-	public ArvoreBinaria() {
-		raiz = null;
-        comp = 0;
-	}
+    public int reh(int elemento){
+        return ++elemento % m;
+    }
 
-	public boolean pesquisar(String x) {
-        System.out.print(" raiz");
-		return pesquisar(x, raiz);
-	}
+    public boolean inserir (int elemento){
+        boolean resp = false;
 
-	private boolean pesquisar(String x, No i) {
-        boolean resp;
-	    if (i == null) {
-            System.out.println(" NAO");
-            comp++;
-            resp = false;
-        } else if (x.compareTo(i.serie.getName()) == 0) {
-            System.out.println(" SIM");
-            comp++;
+        if(elemento != NULO){
+
+            int pos = h(elemento);
+
+            if(tabela[pos] == NULO){
+                tabela[pos] = elemento;
+                resp = true;
+
+            } else {
+
+                pos = reh(elemento);
+
+                if(tabela[pos] == NULO){
+                tabela[pos] = elemento;
+                resp = true;
+                }
+            }
+        }
+
+        return resp;
+    }
+
+    public boolean pesquisar (int elemento){
+        boolean resp = false;
+
+        int pos = h(elemento);
+
+        if(tabela[pos] == elemento){
             resp = true;
-        } else if (x.compareTo(i.serie.getName()) < 0) {
-            System.out.print(" esq");
-            comp++;
-            resp = pesquisar(x, i.esq);
+
         } else {
-            System.out.print(" dir");
-            comp++;
-            resp = pesquisar(x, i.dir);
-            //System.out.println(x + "\t" + i.serie.getName());
+            pos = reh(elemento);
+
+            if(tabela[pos] == elemento){
+                resp = true;
+            }
         }
         return resp;
-	}
-
-	public void inserir(Serie x) throws Exception {
-		raiz = inserir(x, raiz);
-	}
-
-	private No inserir(Serie x, No i) throws Exception {
-		if (i == null) {
-            i = new No(x);
-            comp++;
-        } else if (x.getName().compareTo(i.serie.getName()) < 0) {
-            comp++;
-            i.esq = inserir(x, i.esq);
-        } else if (x.getName().compareTo(i.serie.getName()) > 0) {
-            comp++;
-            i.dir = inserir(x, i.dir);
-        } else {
-            comp++;
-            throw new Exception("Erro ao inserir!");
-        }
-		return i;
     }
-
-	public void remover(String x) throws Exception {
-        if(xama(x))
-		    raiz = remover(x, raiz);
-	}
-
-	private No remover(String x, No i) throws Exception {
-        if (i == null) {
-            comp++;
-            throw new Exception("Erro ao remover!");
-         } else if (x.compareTo(i.serie.getName()) < 0) {
-            comp++;
-            i.esq = remover(x, i.esq);
-         } else if (x.compareTo(i.serie.getName()) > 0) {
-            comp++;
-            i.dir = remover(x, i.dir);
-         // Sem no a direita.
-         } else if (i.dir == null) {
-            comp++;
-            i = i.esq;
-         // Sem no a esquerda.
-         } else if (i.esq == null) {
-            comp++;
-            i = i.dir;
-         // No a esquerda e no a direita.
-         } else {
-            comp++;
-            i.esq = maiorEsq(i, i.esq);
-	     }
-		return i;
-	}
-	
-    public boolean xama(String x) {
-		return xama(x, raiz);
-	}
-
-	private boolean xama(String x, No i) {
-        boolean resp;
-	    if (i == null) {
-            comp++;
-            resp = false;
-        } else if (x.compareTo(i.serie.getName()) == 0) {
-            comp++;
-            resp = true;
-        } else if (x.compareTo(i.serie.getName()) < 0) {
-            comp++;
-            resp = xama(x, i.esq);
-        } else {
-            comp++;
-            resp = xama(x, i.dir);
-        }
-        return resp;
-	}
-
-	private No maiorEsq(No i, No j) {
-      // Encontrou o maximo da subarvore esquerda.
-		if (j.dir == null) {
-            comp++;
-			i.serie = j.serie; // Substitui i por j.
-			j = j.esq; // Substitui j por j.ESQ.
-      // Existe no a direita.
-		} else {
-         // Caminha para direita.
-            comp++;
-			j.dir = maiorEsq(i, j.dir);
-		}
-		return j;
-	}
-    public void caminharCentral() {
-		System.out.print("[ ");
-		caminharCentral(raiz);
-		System.out.println("]");
-	}
-
-	private void caminharCentral(No i) {
-		if (i != null) {
-			caminharCentral(i.esq); // Elementos da esquerda.
-			System.out.print(i.serie.getName() + " "); // Conteudo do no.
-			caminharCentral(i.dir); // Elementos da direita.
-		}
-	}
 }
 
 //classe main
-public class TP04Q01{
+public class TP04Q03{
     public static void main(String[] args) throws Exception{
         long inicio = now();
         String[] entrada = new String[1000];
-        String[] file = new String[10];
-        Serie[] passa = new Serie[30];
         String[] pesquisa = new String[50];
-        ArvoreBinaria arvore = new ArvoreBinaria();
-        int numEntrada = 0, n = 0, pos = 0;
+        AVL arvore = new AVL();
+        int numEntrada = 0;
 
         do{
             entrada[numEntrada] = MyIO.readLine();
@@ -483,24 +385,7 @@ public class TP04Q01{
             serie[i].readClass(entrada[i]);
             arvore.inserir(serie[i]);
         }
-        n = MyIO.readInt();
-        String doido;
-
-        //leitura das inserções e remoções na árvore
-        for(int i = 0; i < n; i++){
-            doido = MyIO.readLine();
-            passa[i] = new Serie();
-            if(doido.contains("I")){
-                file = doido.split(" ");
-                passa[i].readClass(file[1]);
-                arvore.inserir(passa[i]);
-            } else if(doido.contains("R")){
-                file = doido.split("R");
-                arvore.remover(file[1].trim());
-            }
-        }
         numEntrada = 0;
-        //arvore.caminharCentral();
         //leitura das séries a serem pesquisadas
         do{
             pesquisa[numEntrada] = MyIO.readLine();
@@ -515,15 +400,15 @@ public class TP04Q01{
     //método para salvar o tempo de execução e o número de repetições no arquivo .txt
     public static void saveFile(double time, int comp){
         try{
-            FileWriter fileWriter = new FileWriter("724667_arvoreBinaria.txt");
+            FileWriter fileWriter = new FileWriter("724667_hashReserva.txt");
             BufferedWriter bw = new BufferedWriter(fileWriter); 
             bw.write(comp + "\t" + time + "s");
             bw.close();
         //Tratamento de exceções
         } catch(FileNotFoundException e) {
-            System.out.println("Unable to open file '" + "724667_arvoreBinaria.txt" + "'");                
+            System.out.println("Unable to open file '" + "724667_hashReserva.txt" + "'");                
         } catch(IOException e) {
-            System.out.println("Error reading file '" + "724667_arvoreBinaria.txt" + "'");
+            System.out.println("Error reading file '" + "724667_hashReserva.txt" + "'");
         }
     }    
     //método para calcular o tempo de execução
