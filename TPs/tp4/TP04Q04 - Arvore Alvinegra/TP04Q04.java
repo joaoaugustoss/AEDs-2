@@ -333,15 +333,19 @@ class Alvinegra {
         private boolean pesquisar(String elemento, NoAN i) {
             boolean resp;
             if (i == null) {
+                comp++
                 System.out.println(" NAO");
                 resp = false;
             } else if (elemento.compareTo(i.elemento.getName()) == 0) {
+                comp++
                 System.out.println(" SIM");
                 resp = true;
             } else if (elemento.compareTo(i.elemento.getName()) < 0) {
+                comp++
                 System.out.print(" esq");
                 resp = pesquisar(elemento, i.esq);
             } else {
+                comp++
                 System.out.print(" dir");
                 resp = pesquisar(elemento, i.dir);
             }
@@ -356,6 +360,7 @@ class Alvinegra {
 
         private void caminharCentral(NoAN i) {
             if (i != null) {
+                comp++
                 caminharCentral(i.esq); // Elementos da esquerda.
                 System.out.print(i.elemento.getName() + ((i.cor) ? "(p) " : "(b) ")); // Conteudo do no.
                 caminharCentral(i.dir); // Elementos da direita.
@@ -365,87 +370,94 @@ class Alvinegra {
         public void inserir(Serie elemento) throws Exception {
             //Se a arvore estiver vazia
             if(raiz == null){
+                comp++
                 raiz = new NoAN(elemento);
-
             //Senao, se a arvore tiver um elemento 
             } else if (raiz.esq == null && raiz.dir == null){
+                comp++
                 if (elemento.getName().compareTo(raiz.elemento.getName()) < 0){
+                    comp++
                     raiz.esq = new NoAN(elemento);
                 } else {
+                    comp++
                     raiz.dir = new NoAN(elemento);
                 }
-
             //Senao, se a arvore tiver dois elementos (raiz e dir)
             } else if (raiz.esq == null){
-
+                comp++
                 if(elemento.getName().compareTo(raiz.elemento.getName()) < 0){
+                    comp++
                     raiz.esq = new NoAN(elemento);
-
                 } else if (elemento.getName().compareTo(raiz.dir.elemento.getName()) < 0){
+                    comp++
                     raiz.esq = new NoAN(raiz.elemento);
                     raiz.elemento = elemento;
-
                 } else {
+                    comp++
                     raiz.esq = new NoAN(raiz.elemento);
                     raiz.elemento = raiz.dir.elemento;
                     raiz.dir.elemento = elemento;
                 }
-
                 raiz.esq.cor = raiz.dir.cor = false;
-                
             //Senao, se a arvore tiver dois elementos (raiz e esq)
             } else if (raiz.dir == null){
-                
+                comp++
                 if(elemento.getName().compareTo(raiz.elemento.getName()) > 0){
+                    comp++
                     raiz.dir = new NoAN(elemento);
                 } else if (elemento.getName().compareTo(raiz.esq.elemento.getName()) > 0){
+                    comp++
                     raiz.dir = new NoAN(raiz.elemento);
                     raiz.elemento = elemento;
                 } else {
+                    comp++
                     raiz.dir = new NoAN(raiz.elemento);
                     raiz.elemento = raiz.esq.elemento;
                     raiz.esq.elemento = elemento;
                 }
-
                 raiz.esq.cor = raiz.dir.cor = false;
-
             //Senao, a arvore tem tres ou mais elementos
             } else {
+                    comp++
                 inserir(elemento, null, null, null, raiz);
             }
-
             raiz.cor = false;
         }
 
         private void balancear(NoAN bisavo, NoAN avo, NoAN pai, NoAN i){
-
             //Se o pai tambem e preto, reequilibrar a arvore, rotacionando o avo
             if(pai.cor == true){
-
+                comp++
                 //4 tipos de reequilibrios e acoplamento
                 if(pai.elemento.getName().compareTo(avo.elemento.getName()) > 0){ // rotacao a esquerda ou direita-esquerda
+                    comp++
                     if(i.elemento.getName().compareTo(pai.elemento.getName()) > 0){
+                        comp++
                         avo = rotacaoEsq(avo);
                     } else {
+                        comp++
                         avo = rotacaoDirEsq(avo);
                     }
-
                 } else { // rotacao a direita ou esquerda-direita
+                    comp++
                     if(i.elemento.getName().compareTo(pai.elemento.getName()) < 0){
+                        comp++
                         avo = rotacaoDir(avo);
                     } else {
+                        comp++
                         avo = rotacaoEsqDir(avo);
                     }
                 }
-
                 if (bisavo == null){
+                    comp++
                     raiz = avo;
                 } else if(avo.elemento.getName().compareTo(bisavo.elemento.getName()) < 0){
+                    comp++
                     bisavo.esq = avo;
                 } else {
+                    comp++
                     bisavo.dir = avo;
                 }
-
                 //reestabelecer as cores apos a rotacao
                 avo.cor = false;
                 avo.esq.cor = avo.dir.cor = true;
@@ -454,34 +466,41 @@ class Alvinegra {
 
     private void inserir(Serie elemento, NoAN bisavo, NoAN avo, NoAN pai, NoAN i) throws Exception {
         if (i == null) {
+            comp++
             if(elemento.getName().compareTo(pai.elemento.getName()) < 0){
+                comp++
                 i = pai.esq = new NoAN(elemento, true);
             } else {
+                comp++
                 i = pai.dir = new NoAN(elemento, true);
             }
-
             if(pai.cor == true){
+                comp++
                 balancear(bisavo, avo, pai, i);
             }
-
         } else {
-
+            comp++
             //Achou um 4-no: eh preciso fragmeta-lo e reequilibrar a arvore
             if(i.esq != null && i.dir != null && i.esq.cor == true && i.dir.cor == true){
+                comp++
                 i.cor = true;
                 i.esq.cor = i.dir.cor = false;
                 if(i == raiz){
+                    comp++
                     i.cor = false;
                 }else if(pai.cor == true){
+                    comp++
                     balancear(bisavo, avo, pai, i);
                 }
             }
-
             if (elemento.getName().compareTo(i.elemento.getName()) < 0) {
+                comp++
                 inserir(elemento, avo, pai, i, i.esq);
             } else if (elemento.getName().compareTo(i.elemento.getName()) > 0) {
+                comp++
                 inserir(elemento, avo, pai, i, i.dir);
             } else {
+                comp++
                 throw new Exception("Erro inserir (elemento repetido)!");
             }
         }
@@ -490,17 +509,14 @@ class Alvinegra {
     private NoAN rotacaoDir(NoAN no) {
         NoAN noEsq = no.esq;
         NoAN noEsqDir = noEsq.dir;
-
         noEsq.dir = no;
         no.esq = noEsqDir;
-
         return noEsq;
     }
 
     private NoAN rotacaoEsq(NoAN no) {
         NoAN noDir = no.dir;
         NoAN noDirEsq = noDir.esq;
-
         noDir.esq = no;
         no.dir = noDirEsq;
         return noDir;
@@ -539,6 +555,7 @@ public class TP04Q04{
             arvore.inserir(serie[i]);
         }
         numEntrada = 0;
+        //arvore.caminharCentral();
         //leitura das séries a serem pesquisadas
         do{
             pesquisa[numEntrada] = MyIO.readLine();

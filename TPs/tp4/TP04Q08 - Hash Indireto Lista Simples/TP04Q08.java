@@ -295,95 +295,81 @@ class Serie{
     }
 } 
 
-class Hash {
-    Serie tabela[];
-    int m1, m2, m, reserva, comp;
-    int NULO = -1;
+class HashIndiretoLista {
+    Lista tabela[];
+    int tamanho, comp;
+    final int NULO = -1;
 
-    public Hash (){
-        this(21, 9);
+    public HashIndiretoLista() {
+        this(21);
     }
 
-    public Hash (int m1, int m2){
-        this.m1 = m1;
-        this.m2 = m2;
-        this.m = m1 + m2;
-        this.comp = 0;
-        this.tabela = new Serie [this.m];
-        for(int i = 0; i < m1; i++){
-            tabela[i] = null;
+    public HashIndiretoLista(int tamanho) {
+        this.tamanho = tamanho;
+        comp = 0;
+        tabela = new Lista[tamanho];
+        for (int i = 0; i < tamanho; i++) {
+            tabela[i] = new Lista();
         }
-        reserva = 0;
     }
 
-    public int h(String elemento){
+    public int h(String elemento) {
         int valor = 0;
         for(int i = 0; i < elemento.length(); i++)
             valor += elemento.charAt(i);
-        //System.out.println(valor % m1);
-        return valor % m1;
+        return valor % tamanho;
     }
 
-    public boolean inserir (Serie elemento){
-        boolean resp = false;
-        //System.out.print(elemento.getName());
-        if(elemento != null){
-            comp++;
-            int pos = h(elemento.getName());
-            if(tabela[pos] == null){
-                comp++;
-                tabela[pos] = new Serie();
-                tabela[pos] = elemento;
-                resp = true;
-            } else if (reserva < m2){
-                comp++;
-                tabela[m1 + reserva] = new Serie();
-                tabela[m1 + reserva] = elemento;
-                reserva++;
-                resp = true;
-            }
-        }
-
-        return resp;
-    }
-
-    public boolean pesquisar (String elemento){
-        boolean resp = false;
+    boolean pesquisar(String elemento) {
         int pos = h(elemento);
-        if(tabela[pos] != null){
-            if(tabela[pos].getName().compareTo(elemento) == 0){
-                comp++;
-                System.out.println(" SIM");
-                resp = true;
-            } else if(tabela[pos] != null){
-                for(int i = 0; i < reserva; i++){
-                    if(tabela[m1 + i].getName().compareTo(elemento) == 0){
-                        comp++;
-                        System.out.println(" SIM");
-                        resp = true;
-                        i = reserva;
-                    }
-                }
-            }
-        }
-        return resp;
+        return tabela[pos].pesquisar(elemento);
     }
-    
-    public void mostrar(){
-        for(int i = 0; i < m; i++){
-            if(tabela[i] != null)
-                System.out.println(i + " - " + tabela[i].getName());
+
+    public int inserir(Serie elemento) throws Exception{
+        comp++;
+        int pos = h(elemento.getName());
+        tabela[pos].inserirFim(elemento);
+    }
+}
+
+class Lista{
+    private Serie[] array;
+    private int n;
+
+    public Lista () {
+        this(6);
+    }
+
+    public Lista (int tamanho){
+        array = new Serie[tamanho];
+        n = 0;
+    }
+
+    public void inserirFim(Serie x) throws Exception {
+        //validar insercao
+        if(n >= array.length){
+            throw new Exception("Erro ao inserir!");
         }
+        array[n] = x;
+        n++;
+    }
+
+   public boolean pesquisar(String x) {
+        boolean retorno = false;
+        for (int i = 0; i < n && retorno == false; i++) {
+            retorno = (array[i].getName().compareTo(x) == 0);
+        }
+        return retorno;
     }
 }
 
 //classe main
-public class TP04Q06{
+public class TP04Q08{
     public static void main(String[] args) throws Exception{
         long inicio = now();
         String[] entrada = new String[1000];
         String[] pesquisa = new String[50];
-        Hash tab = new Hash(21, 9);
+        HashIndiretoLista tab = new HashIndiretoLista(21);
         int numEntrada = 0;
 
         do{
@@ -396,11 +382,9 @@ public class TP04Q06{
         for(int i = 0; i < numEntrada; i++){
             serie[i] = new Serie();
             serie[i].readClass(entrada[i]);
-            //System.out.println(tab.inserir(serie[i]));
             tab.inserir(serie[i]);
         }
         //tab.mostrar();
-
         numEntrada = 0;
         //leitura das séries a serem pesquisadas
         do{
@@ -410,24 +394,25 @@ public class TP04Q06{
         for(int i = 0; i < numEntrada; i++){
             if(!tab.pesquisar(pesquisa[i].trim()))
                 System.out.println(" NAO");
-            //tab.pesquisar(pesquisa[i].trim());
+            else
+                System.out.println(" SIM");
         }
+        
         long fim = now();
-        saveFile((fim-inicio)/1000.0, tab.comp);
+        saveFile((fim-inicio)/1000.0, comp);
     }
-
     //método para salvar o tempo de execução e o número de repetições no arquivo .txt
     public static void saveFile(double time, int comp){
         try{
-            FileWriter fileWriter = new FileWriter("724667_hashReserva.txt");
+            FileWriter fileWriter = new FileWriter("724667_hashIndireta.txt");
             BufferedWriter bw = new BufferedWriter(fileWriter); 
             bw.write(comp + "\t" + time + "s");
             bw.close();
         //Tratamento de exceções
         } catch(FileNotFoundException e) {
-            System.out.println("Unable to open file '" + "724667_hashReserva.txt" + "'");                
+            System.out.println("Unable to open file '" + "724667_hashIndireta.txt" + "'");                
         } catch(IOException e) {
-            System.out.println("Error reading file '" + "724667_hashReserva.txt" + "'");
+            System.out.println("Error reading file '" + "724667_hashIndireta.txt" + "'");
         }
     }    
     //método para calcular o tempo de execução
